@@ -2,7 +2,6 @@ package cz.wordik.app.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,8 +16,8 @@ import cz.wordik.app.AppContainer
 import cz.wordik.app.R
 import cz.wordik.app.domain.TestMode
 import cz.wordik.app.domain.TestResult
-import cz.wordik.app.ui.components.BigButton
 import cz.wordik.app.ui.components.ScreenScaffold
+import cz.wordik.app.ui.results.ResultsScreen
 import cz.wordik.app.ui.settings.AppSettingsScreen
 import cz.wordik.app.ui.setup.SetSelectionScreen
 import cz.wordik.app.ui.setup.SetSelectionViewModel
@@ -75,7 +74,12 @@ fun WordikApp(container: AppContainer) {
                 )
             }
             is Screen.Test -> TestHost(screen, container, appViewModel)
-            else -> PlaceholderScreen(screen) { appViewModel.open(Screen.AppSettings) }
+            is Screen.Results -> ResultsScreen(
+                result = screen.result,
+                onRepeat = { appViewModel.repeatTest(screen.setNames, screen.settings) },
+                onBackToSelection = { appViewModel.backToSelection() },
+                onBack = { appViewModel.back() },
+            )
         }
     }
 }
@@ -104,15 +108,6 @@ private fun TestHost(screen: Screen.Test, container: AppContainer, appViewModel:
             )
             AssemblyTestScreen(vm, onFinished = finish)
         }
-    }
-}
-
-/** Dočasná obrazovka, než vzniknou skutečné (kroky 9 až 12). */
-@Composable
-private fun PlaceholderScreen(screen: Screen, onOpenSettings: () -> Unit) {
-    ScreenScaffold(title = stringResource(R.string.app_name)) {
-        Text(screen::class.simpleName.orEmpty(), style = MaterialTheme.typography.headlineMedium)
-        BigButton(stringResource(R.string.placeholder_open_settings), onOpenSettings, Modifier.fillMaxWidth())
     }
 }
 

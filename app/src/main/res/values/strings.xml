@@ -60,10 +60,22 @@
     <string name="quit_confirm">Ukončit test</string>
     <string name="quit_cancel">Pokračovat v testu</string>
 
+    <!-- Výsledky -->
+    <string name="results_title">Výsledky</string>
+    <string name="results_incomplete">Test nebyl dokončen</string>
+    <string name="results_success">úspěšnost</string>
+    <string name="results_correct">Správně</string>
+    <string name="results_wrong">Špatně</string>
+    <string name="results_duration">Doba trvání</string>
+    <string name="results_wrong_words">Chybně zodpovězená slovíčka</string>
+    <string name="results_no_wrong_words">Žádná, výborně!</string>
+    <string name="results_all_words">Všechna slovíčka podle úspěšnosti</string>
+    <string name="results_all_words_hint">Od nejnižší úspěšnosti, při shodě podle abecedy.</string>
+    <string name="results_repeat">Opakovat test</string>
+    <string name="results_back_to_selection">Zpět na výběr sad</string>
+
     <!-- Chyba při startu -->
     <string name="startup_error_title">Aplikaci se nepodařilo spustit</string>
     <string name="startup_error_hint">Přibalená data jsou chybná:</string>
 
-    <!-- Dočasné obrazovky (nahradí se v dalších krocích) -->
-    <string name="placeholder_open_settings">Nastavení aplikace</string>
 </resources>

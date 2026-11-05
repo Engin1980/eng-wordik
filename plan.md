@@ -164,11 +164,11 @@ Co se dělá: průběh testu se skládáním slova.
 
 Co se dělá: obrazovka po skončení testu.
 
-- [ ] 🤖 Počet správných a špatných odpovědí, procento, doba trvání
-- [ ] 🤖 Seznam chybně zodpovězených slovíček
-- [ ] 🤖 Seznam všech slovíček podle úspěšnosti od nejnižší, při shodě podle abecedy
-- [ ] 🤖 Označení „Test nebyl dokončen“ při předčasném ukončení
-- [ ] 🤖 Tlačítka pro návrat na výběr sad a pro opakování testu se stejným nastavením
+- [x] 🤖 Počet správných a špatných odpovědí, procento, doba trvání
+- [x] 🤖 Seznam chybně zodpovězených slovíček
+- [x] 🤖 Seznam všech slovíček podle úspěšnosti od nejnižší, při shodě podle abecedy
+- [x] 🤖 Označení „Test nebyl dokončen“ při předčasném ukončení
+- [x] 🤖 Tlačítka pro návrat na výběr sad a pro opakování testu se stejným nastavením
 - [ ] 🤖 Testy formátování výsledků a Compose UI test obrazovky
 
 ## Krok 13: Zvuky a motivační prvky
