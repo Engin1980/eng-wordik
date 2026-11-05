@@ -10,6 +10,8 @@ Gradle projekt (Kotlin DSL, version catalog `gradle/libs.versions.toml`, AGP 9.4
 - Balíčky v `app/src/main/java/cz/wordik/app/`: `domain` (čistá logika bez Androidu), `data` (načítání sad, nastavení), `ui` (Compose obrazovky, ViewModely).
 - `local.properties` (cesta k SDK) je mimo git; na Windows musí mít `sdk.dir=C\:\\Users\\...` (zdvojená zpětná lomítka) (jinak selže lint `PropertyEscape`). `JAVA_HOME` ukazuje na JDK 21.
 
+- Testy `SettingsStore` používají převážně in-memory DataStore: souborový DataStore na Windows JVM selže při druhém zápisu (přejmenování přes existující soubor), na Androidu ne.
+
 ## Commands
 
 Na Windows `gradlew.bat` (v Git Bash `./gradlew.bat`).

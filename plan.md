@@ -71,12 +71,12 @@ Co se dělá: konfigurační soubor s výchozími hodnotami a rozsahy a model na
 
 Co se dělá: pamatování posledního nastavení pro kombinaci sad a nastavení aplikace (Normální / Velké).
 
-- [ ] 🤖 Zvolit úložiště: Jetpack DataStore (historie se neukládá, databáze není potřeba)
-- [ ] 🤖 Klíč kombinace sad (stabilní nezávisle na pořadí výběru, např. seřazené názvy sad)
-- [ ] 🤖 `SettingsStore`: uložení a načtení `TestSettings` pro kombinaci sad, pro dosud nepoužitou kombinaci vrátit výchozí
-- [ ] 🤖 Uložení volby „Normální / Velké“ pro celou aplikaci
-- [ ] 🤖 Ošetřit poškozená nebo nekompatibilní uložená data (návrat k výchozím hodnotám)
-- [ ] 🤖 Testy: ukládání a načtení, jiné pořadí sad = stejná kombinace, nová kombinace = výchozí hodnoty, poškozená data
+- [x] 🤖 Zvolit úložiště: Jetpack DataStore (historie se neukládá, databáze není potřeba)
+- [x] 🤖 Klíč kombinace sad (stabilní nezávisle na pořadí výběru, např. seřazené názvy sad)
+- [x] 🤖 `SettingsStore`: uložení a načtení `TestSettings` pro kombinaci sad, pro dosud nepoužitou kombinaci vrátit výchozí
+- [x] 🤖 Uložení volby „Normální / Velké“ pro celou aplikaci
+- [x] 🤖 Ošetřit poškozená nebo nekompatibilní uložená data (návrat k výchozím hodnotám)
+- [x] 🤖 Testy: ukládání a načtení, jiné pořadí sad = stejná kombinace, nová kombinace = výchozí hodnoty, poškozená data
 
 ## Krok 5: Jádro testu (průchody, konec, statistiky)
 
