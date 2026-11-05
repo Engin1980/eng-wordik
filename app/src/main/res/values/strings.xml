@@ -44,6 +44,17 @@
     <string name="error_not_enough_words">Pro výběr z variant je potřeba alespoň %1$d slovíček (počet nesprávných variant + 1), vybrané sady mají jen %2$d. Snižte počet nesprávných variant nebo vyberte víc sad.</string>
     <string name="error_out_of_range">Hodnota „%1$s“ musí být od %2$d do %3$d.</string>
 
+    <!-- Test -->
+    <string name="test_title">Test</string>
+    <string name="test_progress">Průchod %1$d · úspěšnost %2$d %%</string>
+    <string name="test_quit">Ukončit</string>
+    <string name="test_next">Dál</string>
+    <string name="test_error">Test se nepodařilo sestavit: vybrané sady neobsahují dost různých slovíček pro zvolený počet možností.</string>
+    <string name="quit_title">Ukončit test?</string>
+    <string name="quit_text">Test se přeruší a zobrazí se výsledky dosavadního průběhu. Přerušený test nelze obnovit.</string>
+    <string name="quit_confirm">Ukončit test</string>
+    <string name="quit_cancel">Pokračovat v testu</string>
+
     <!-- Chyba při startu -->
     <string name="startup_error_title">Aplikaci se nepodařilo spustit</string>
     <string name="startup_error_hint">Přibalená data jsou chybná:</string>

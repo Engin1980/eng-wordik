@@ -141,12 +141,12 @@ Co se dělá: obrazovky před začátkem testu.
 
 Co se dělá: průběh testu s výběrem z variant.
 
-- [ ] 🤖 ViewModel nad `TestSession` a generátorem otázek
-- [ ] 🤖 Zobrazení slovíčka a N+1 tlačítek, zpětná vazba (barva) po odpovědi
-- [ ] 🤖 Po správné odpovědi automatický přechod po intervalu z konfigurace a tlačítko „Dál“ pro dřívější přechod
-- [ ] 🤖 Po chybné odpovědi zvýraznění správné odpovědi a povinné „Dál“, bez možnosti opravy
-- [ ] 🤖 Tlačítko „Ukončit test“ (potvrzení) vede na výsledky s označením „Test nebyl dokončen“
-- [ ] 🤖 ViewModel testy s řízeným časem (interval, automatický přechod, předčasný konec, konec při splnění podmínek)
+- [x] 🤖 ViewModel nad `TestSession` a generátorem otázek
+- [x] 🤖 Zobrazení slovíčka a N+1 tlačítek, zpětná vazba (barva) po odpovědi
+- [x] 🤖 Po správné odpovědi automatický přechod po intervalu z konfigurace a tlačítko „Dál“ pro dřívější přechod
+- [x] 🤖 Po chybné odpovědi zvýraznění správné odpovědi a povinné „Dál“, bez možnosti opravy
+- [x] 🤖 Tlačítko „Ukončit test“ (potvrzení) vede na výsledky s označením „Test nebyl dokončen“
+- [x] 🤖 ViewModel testy s řízeným časem (interval, automatický přechod, předčasný konec, konec při splnění podmínek)
 
 ## Krok 11: Obrazovka režimu 2
 

@@ -15,6 +15,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import cz.wordik.app.AppContainer
 import cz.wordik.app.R
+import cz.wordik.app.domain.TestMode
+import cz.wordik.app.domain.TestResult
 import cz.wordik.app.ui.components.BigButton
 import cz.wordik.app.ui.components.ScreenScaffold
 import cz.wordik.app.ui.settings.AppSettingsScreen
@@ -22,6 +24,8 @@ import cz.wordik.app.ui.setup.SetSelectionScreen
 import cz.wordik.app.ui.setup.SetSelectionViewModel
 import cz.wordik.app.ui.setup.TestSetupScreen
 import cz.wordik.app.ui.setup.TestSetupViewModel
+import cz.wordik.app.ui.test.ChoiceTestScreen
+import cz.wordik.app.ui.test.ChoiceTestViewModel
 import cz.wordik.app.ui.theme.WordikTheme
 
 /** Kořen aplikace: téma podle volby velikosti a zásobník obrazovek. */
@@ -68,8 +72,28 @@ fun WordikApp(container: AppContainer) {
                     onBack = { appViewModel.back() },
                 )
             }
+            is Screen.Test -> TestHost(screen, container, appViewModel)
             else -> PlaceholderScreen(screen) { appViewModel.open(Screen.AppSettings) }
         }
+    }
+}
+
+/** Spustí test podle zvoleného režimu; každý běh ([Screen.Test.runId]) má vlastní ViewModel. */
+@Composable
+private fun TestHost(screen: Screen.Test, container: AppContainer, appViewModel: AppViewModel) {
+    val words = container.sets.filter { it.name in screen.setNames }.flatMap { it.words }
+    val finish: (TestResult) -> Unit = { appViewModel.showResults(screen.setNames, screen.settings, it) }
+    when (screen.settings.mode) {
+        TestMode.CHOICE -> {
+            val vm: ChoiceTestViewModel = viewModel(
+                key = "test:${screen.runId}",
+                factory = viewModelFactory {
+                    initializer { ChoiceTestViewModel(words, screen.settings, container.config) }
+                },
+            )
+            ChoiceTestScreen(vm, onFinished = finish, onAbandon = { appViewModel.back() })
+        }
+        TestMode.ASSEMBLY -> PlaceholderScreen(screen) { appViewModel.open(Screen.AppSettings) }
     }
 }
 
