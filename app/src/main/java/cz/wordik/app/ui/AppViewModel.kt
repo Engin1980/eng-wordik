@@ -19,6 +19,12 @@ sealed interface Screen {
     data object SetSelection : Screen
     data object AppSettings : Screen
 
+    /** Editace textu sady; [isNew] jen označuje čerstvě vytvořenou nebo importovanou sadu. */
+    data class EditSet(val name: String, val initialText: String, val isNew: Boolean) : Screen
+
+    /** Skenování QR kódů pro import sady s daným názvem. */
+    data class ImportScan(val name: String) : Screen
+
     /** Nastavení testu pro vybranou kombinaci sad. */
     data class TestSetup(val setNames: List<String>) : Screen
 
@@ -51,6 +57,9 @@ class AppViewModel(private val store: SettingsStore) : ViewModel() {
         _stack.update { it.dropLast(1) }
         return true
     }
+
+    /** Nahradí aktuální obrazovku jinou (např. skener editorem naskenovaného textu). */
+    fun replaceTop(screen: Screen) = _stack.update { it.dropLast(1) + screen }
 
     fun backToSelection() = _stack.update { listOf(Screen.SetSelection) }
 

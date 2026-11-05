@@ -8,6 +8,17 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import cz.wordik.app.domain.SetNameError
+import cz.wordik.app.domain.SetNameValidator
+import cz.wordik.app.ui.components.BigOutlinedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -37,20 +48,59 @@ import cz.wordik.app.ui.components.ScreenScaffold
 import cz.wordik.app.ui.theme.LocalSizes
 import cz.wordik.app.ui.theme.WordikTheme
 
+/** K čemu se právě zadává název sady. */
+private enum class NamePurpose { NEW, IMPORT }
+
 @Composable
 fun SetSelectionScreen(
     viewModel: SetSelectionViewModel,
     onContinue: (List<String>) -> Unit,
     onOpenSettings: () -> Unit,
+    onEdit: (name: String, text: String) -> Unit,
+    onCreated: (name: String) -> Unit,
+    onImport: (name: String) -> Unit,
 ) {
     val selected by viewModel.selected.collectAsStateWithLifecycle()
+    val sets by viewModel.setsState.collectAsStateWithLifecycle()
+    var namePurpose by rememberSaveable { mutableStateOf<NamePurpose?>(null) }
+    var deleting by rememberSaveable { mutableStateOf<String?>(null) }
+
+    namePurpose?.let { purpose ->
+        SetNameDialog(
+            title = stringResource(if (purpose == NamePurpose.NEW) R.string.set_new_title else R.string.set_import_title),
+            validate = viewModel::nameError,
+            onConfirm = { name ->
+                namePurpose = null
+                when (purpose) {
+                    NamePurpose.NEW -> onCreated(viewModel.createSet(name))
+                    NamePurpose.IMPORT -> onImport(name.trim())
+                }
+            },
+            onDismiss = { namePurpose = null },
+        )
+    }
+    deleting?.let { name ->
+        DeleteSetDialog(
+            name = name,
+            onConfirm = {
+                deleting = null
+                viewModel.deleteSet(name)
+            },
+            onDismiss = { deleting = null },
+        )
+    }
+
     SetSelectionContent(
-        sets = viewModel.sets,
-        selected = selected,
+        sets = sets,
+        selected = viewModel.existingSelection(selected),
         selectedWordCount = viewModel.selectedWordCount(),
         onToggle = viewModel::toggle,
         onContinue = { onContinue(viewModel.selectedNames()) },
         onOpenSettings = onOpenSettings,
+        onNew = { namePurpose = NamePurpose.NEW },
+        onImport = { namePurpose = NamePurpose.IMPORT },
+        onEdit = { onEdit(it, viewModel.setText(it)) },
+        onDelete = { deleting = it },
     )
 }
 
@@ -62,6 +112,10 @@ fun SetSelectionContent(
     onToggle: (String) -> Unit,
     onContinue: () -> Unit,
     onOpenSettings: () -> Unit,
+    onNew: () -> Unit = {},
+    onImport: () -> Unit = {},
+    onEdit: (String) -> Unit = {},
+    onDelete: (String) -> Unit = {},
 ) {
     ScreenScaffold(
         title = stringResource(R.string.select_title),
@@ -87,28 +141,132 @@ fun SetSelectionContent(
         },
     ) {
         Text(stringResource(R.string.select_hint), style = MaterialTheme.typography.bodyLarge)
+        if (sets.isEmpty()) {
+            Text(
+                stringResource(R.string.select_empty),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
         sets.forEach { set ->
             val checked = set.name in selected
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = LocalSizes.current.buttonHeight)
-                    .toggleable(value = checked, role = Role.Checkbox, onValueChange = { onToggle(set.name) })
-                    .padding(horizontal = 8.dp),
+                modifier = Modifier.fillMaxWidth().heightIn(min = LocalSizes.current.buttonHeight),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Checkbox(checked = checked, onCheckedChange = null)
-                Column(Modifier.padding(start = 12.dp)) {
-                    Text(set.name, style = MaterialTheme.typography.titleMedium)
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(min = LocalSizes.current.buttonHeight)
+                        .toggleable(value = checked, role = Role.Checkbox, onValueChange = { onToggle(set.name) })
+                        .padding(horizontal = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Checkbox(checked = checked, onCheckedChange = null)
+                    Column(Modifier.padding(start = 12.dp)) {
+                        Text(set.name, style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            pluralStringResource(R.plurals.word_count, set.words.size, set.words.size),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+                TextButton(
+                    onClick = { onEdit(set.name) },
+                    modifier = Modifier.semantics { contentDescription = "Upravit ${set.name}" },
+                ) {
+                    Text(stringResource(R.string.set_edit), style = MaterialTheme.typography.titleMedium)
+                }
+                TextButton(
+                    onClick = { onDelete(set.name) },
+                    modifier = Modifier.semantics { contentDescription = "Smazat ${set.name}" },
+                ) {
                     Text(
-                        pluralStringResource(R.plurals.word_count, set.words.size, set.words.size),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        stringResource(R.string.set_delete),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.error,
                     )
                 }
             }
         }
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            BigOutlinedButton(stringResource(R.string.set_new), onNew, Modifier.weight(1f))
+            BigOutlinedButton(stringResource(R.string.set_import), onImport, Modifier.weight(1f))
+        }
     }
+}
+
+/** Dotaz na název nové nebo importované sady; chyby názvu se hlásí hned v dialogu. */
+@Composable
+private fun SetNameDialog(
+    title: String,
+    validate: (String) -> SetNameError?,
+    onConfirm: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var name by rememberSaveable { mutableStateOf("") }
+    var error by rememberSaveable { mutableStateOf<SetNameError?>(null) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = {
+                        name = it
+                        error = null
+                    },
+                    label = { Text(stringResource(R.string.set_name_label)) },
+                    singleLine = true,
+                    isError = error != null,
+                    modifier = Modifier.fillMaxWidth().testTag("set_name"),
+                )
+                error?.let {
+                    Text(setNameErrorText(it), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                val problem = validate(name)
+                if (problem == null) onConfirm(name) else error = problem
+            }) { Text(stringResource(R.string.set_name_confirm), style = MaterialTheme.typography.titleMedium) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel), style = MaterialTheme.typography.titleMedium) }
+        },
+    )
+}
+
+@Composable
+private fun setNameErrorText(error: SetNameError): String = when (error) {
+    SetNameError.EMPTY -> stringResource(R.string.set_name_error_empty)
+    SetNameError.DUPLICATE -> stringResource(R.string.set_name_error_duplicate)
+    SetNameError.INVALID_CHARS -> stringResource(R.string.set_name_error_chars, SetNameValidator.FORBIDDEN_CHARS)
+    SetNameError.TOO_LONG -> stringResource(R.string.set_name_error_long, SetNameValidator.MAX_LENGTH)
+}
+
+@Composable
+private fun DeleteSetDialog(name: String, onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.set_delete_title, name)) },
+        text = { Text(stringResource(R.string.set_delete_text)) },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(
+                    stringResource(R.string.set_delete_confirm),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.error,
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel), style = MaterialTheme.typography.titleMedium) }
+        },
+    )
 }
 
 @Composable

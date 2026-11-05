@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Wordík</string>
+    <string name="cancel">Zrušit</string>
+    <string name="select_empty">Zatím tu není žádná sada. Vytvořte novou nebo importujte přes QR kód.</string>
+    <string name="set_new">Nová sada</string>
+    <string name="set_import">Importovat</string>
+    <string name="set_edit">Upravit</string>
+    <string name="set_delete">Smazat</string>
+    <string name="set_new_title">Nová sada</string>
+    <string name="set_import_title">Import sady z QR kódu</string>
+    <string name="set_name_label">Název sady</string>
+    <string name="set_name_confirm">Pokračovat</string>
+    <string name="set_name_error_empty">Zadejte název sady.</string>
+    <string name="set_name_error_duplicate">Sada s tímto názvem už existuje.</string>
+    <string name="set_name_error_chars">Název nesmí obsahovat znaky %1$s ani končit tečkou.</string>
+    <string name="set_name_error_long">Název může mít nejvýše %1$d znaků.</string>
+    <string name="set_delete_title">Smazat sadu „%1$s“?</string>
+    <string name="set_delete_text">Sada se nenávratně smaže.</string>
+    <string name="set_delete_confirm">Smazat sadu</string>
+    <string name="edit_title">Sada: %1$s</string>
+    <string name="edit_hint">Jedno slovíčko na řádek ve tvaru česky;cizí.</string>
+    <string name="edit_save">Uložit</string>
+    <string name="edit_discard">Zahodit změny</string>
+    <string name="edit_discard_title">Zahodit změny?</string>
+    <string name="edit_discard_text">Neuložené změny se ztratí.</string>
+    <string name="edit_discard_confirm">Zahodit</string>
+    <string name="edit_keep_editing">Pokračovat v úpravách</string>
+    <string name="edit_errors_title">Sadu nelze uložit, opravte tyto řádky:</string>
+    <string name="edit_errors_more">… a dalších chyb: %1$d</string>
+    <string name="scan_title">Import: %1$s</string>
+    <string name="scan_hint">Namiřte kameru na QR kód se slovíčky. Můžete naskenovat více kódů za sebou.</string>
+    <string name="scan_progress">Naskenováno kódů: %1$d, slovíček: %2$d</string>
+    <string name="scan_done">Hotovo</string>
+    <string name="scan_permission_rationale">Ke čtení QR kódů potřebuje aplikace povolit kameru. Kamera se používá jen ke skenování kódů.</string>
+    <string name="scan_permission_denied">Kamera není povolená, bez ní nejde QR kód naskenovat. Povolení můžete udělit tlačítkem níže nebo v nastavení telefonu.</string>
+    <string name="scan_permission_button">Povolit kameru</string>
     <string name="back">Zpět</string>
 
     <!-- Nastavení aplikace -->

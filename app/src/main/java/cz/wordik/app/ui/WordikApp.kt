@@ -16,9 +16,14 @@ import cz.wordik.app.AppContainer
 import cz.wordik.app.R
 import cz.wordik.app.domain.TestMode
 import cz.wordik.app.domain.TestResult
+import cz.wordik.app.domain.WordSet
 import cz.wordik.app.ui.components.ScreenScaffold
 import cz.wordik.app.ui.results.ResultsScreen
 import cz.wordik.app.ui.settings.AppSettingsScreen
+import cz.wordik.app.ui.setup.QrImportViewModel
+import cz.wordik.app.ui.setup.QrScanScreen
+import cz.wordik.app.ui.setup.SetEditorScreen
+import cz.wordik.app.ui.setup.SetEditorViewModel
 import cz.wordik.app.ui.setup.SetSelectionScreen
 import cz.wordik.app.ui.setup.SetSelectionViewModel
 import cz.wordik.app.ui.setup.TestSetupScreen
@@ -37,6 +42,7 @@ fun WordikApp(container: AppContainer) {
     )
     val stack by appViewModel.stack.collectAsStateWithLifecycle()
     val sizeLevel by appViewModel.sizeLevel.collectAsStateWithLifecycle()
+    val sets by container.library.sets.collectAsStateWithLifecycle()
 
     WordikTheme(sizeLevel = sizeLevel, fontName = container.config.fontName) {
         BackHandler(enabled = stack.size > 1) { appViewModel.back() }
@@ -49,12 +55,15 @@ fun WordikApp(container: AppContainer) {
             )
             Screen.SetSelection -> {
                 val selectionViewModel: SetSelectionViewModel = viewModel(
-                    factory = viewModelFactory { initializer { SetSelectionViewModel(container.sets) } },
+                    factory = viewModelFactory { initializer { SetSelectionViewModel(container.library.sets, container.library) } },
                 )
                 SetSelectionScreen(
                     viewModel = selectionViewModel,
                     onContinue = { appViewModel.open(Screen.TestSetup(it)) },
                     onOpenSettings = { appViewModel.open(Screen.AppSettings) },
+                    onEdit = { name, text -> appViewModel.open(Screen.EditSet(name, text, isNew = false)) },
+                    onCreated = { appViewModel.open(Screen.EditSet(it, "", isNew = true)) },
+                    onImport = { appViewModel.open(Screen.ImportScan(it)) },
                 )
             }
             is Screen.TestSetup -> {
@@ -62,7 +71,7 @@ fun WordikApp(container: AppContainer) {
                     key = "setup:" + screen.setNames.joinToString("|"),
                     factory = viewModelFactory {
                         initializer {
-                            TestSetupViewModel(screen.setNames, container.sets, container.config, container.settingsStore)
+                            TestSetupViewModel(screen.setNames, sets, container.config, container.settingsStore)
                         }
                     },
                 )
@@ -73,7 +82,27 @@ fun WordikApp(container: AppContainer) {
                     onBack = { appViewModel.back() },
                 )
             }
-            is Screen.Test -> TestHost(screen, container, appViewModel)
+            is Screen.EditSet -> {
+                val editorViewModel: SetEditorViewModel = viewModel(
+                    key = "edit:" + screen.name + ":" + screen.isNew,
+                    factory = viewModelFactory {
+                        initializer { SetEditorViewModel(screen.name, screen.initialText, container.library) }
+                    },
+                )
+                SetEditorScreen(editorViewModel, onClose = { appViewModel.back() })
+            }
+            is Screen.ImportScan -> {
+                val importViewModel: QrImportViewModel = viewModel(
+                    key = "import:" + screen.name,
+                    factory = viewModelFactory { initializer { QrImportViewModel(screen.name) } },
+                )
+                QrScanScreen(
+                    viewModel = importViewModel,
+                    onDone = { text -> appViewModel.replaceTop(Screen.EditSet(screen.name, text, isNew = true)) },
+                    onBack = { appViewModel.back() },
+                )
+            }
+            is Screen.Test -> TestHost(screen, sets, container, appViewModel)
             is Screen.Results -> ResultsScreen(
                 result = screen.result,
                 onRepeat = { appViewModel.repeatTest(screen.setNames, screen.settings) },
@@ -86,8 +115,8 @@ fun WordikApp(container: AppContainer) {
 
 /** Spustí test podle zvoleného režimu; každý běh ([Screen.Test.runId]) má vlastní ViewModel. */
 @Composable
-private fun TestHost(screen: Screen.Test, container: AppContainer, appViewModel: AppViewModel) {
-    val words = container.sets.filter { it.name in screen.setNames }.flatMap { it.words }
+private fun TestHost(screen: Screen.Test, sets: List<WordSet>, container: AppContainer, appViewModel: AppViewModel) {
+    val words = sets.filter { it.name in screen.setNames }.flatMap { it.words }
     val finish: (TestResult) -> Unit = { appViewModel.showResults(screen.setNames, screen.settings, it) }
     when (screen.settings.mode) {
         TestMode.CHOICE -> {
