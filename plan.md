@@ -61,11 +61,11 @@ Co se dělá: datový model, parser souboru `česky;cizí` a načtení přibalen
 
 Co se dělá: konfigurační soubor s výchozími hodnotami a rozsahy a model nastavení testu.
 
-- [ ] 🤖 Konfigurační soubor v `assets` (nebo `res/raw`): výchozí hodnoty, rozsahy, interval automatického přechodu, font
-- [ ] 🤖 Model `TestSettings` (režim, počet nesprávných variant, minimální průchody, minimální úspěšnost, písmena navíc, způsob hodnocení, směr)
-- [ ] 🤖 Načtení konfigurace a převod na výchozí `TestSettings`
-- [ ] 🤖 Validace nastavení podle rozsahů a podle vybraných sad (režim 1 vyžaduje alespoň N+1 slovíček celkem)
-- [ ] 🤖 Unit testy: načtení konfigurace, hranice rozsahů, chybějící nebo chybná hodnota v konfiguraci, validace N+1
+- [x] 🤖 Konfigurační soubor v `assets` (nebo `res/raw`): výchozí hodnoty, rozsahy, interval automatického přechodu, font
+- [x] 🤖 Model `TestSettings` (režim, počet nesprávných variant, minimální průchody, minimální úspěšnost, písmena navíc, způsob hodnocení, směr)
+- [x] 🤖 Načtení konfigurace a převod na výchozí `TestSettings`
+- [x] 🤖 Validace nastavení podle rozsahů a podle vybraných sad (režim 1 vyžaduje alespoň N+1 slovíček celkem)
+- [x] 🤖 Unit testy: načtení konfigurace, hranice rozsahů, chybějící nebo chybná hodnota v konfiguraci, validace N+1
 
 ## Krok 4: Ukládání nastavení
 
