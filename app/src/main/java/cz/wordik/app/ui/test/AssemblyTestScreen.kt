@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -104,7 +105,7 @@ fun AssemblyTestContent(
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().padding(24.dp),
+                modifier = Modifier.fillMaxWidth().padding(24.dp).testTag("prompt"),
             )
         }
 
@@ -171,7 +172,7 @@ private fun SlotBox(char: Char?, clickable: Boolean, onClick: () -> Unit) {
         shape = RoundedCornerShape(10.dp),
         color = if (filled) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceVariant,
         border = BorderStroke(2.dp, if (filled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.outline),
-        modifier = Modifier.heightIn(min = size).widthIn(min = size),
+        modifier = Modifier.heightIn(min = size).widthIn(min = size).testTag("slot"),
     ) {
         Text(
             text = when (char) {
@@ -195,7 +196,7 @@ private fun TileKey(char: Char, used: Boolean, enabled: Boolean, onClick: () -> 
         shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary,
-        modifier = Modifier.heightIn(min = size).widthIn(min = size).alpha(if (used) 0.25f else 1f),
+        modifier = Modifier.heightIn(min = size).widthIn(min = size).alpha(if (used) 0.25f else 1f).testTag("tile"),
     ) {
         Text(
             text = if (char == ' ') stringResource(R.string.assembly_space) else char.toString(),
