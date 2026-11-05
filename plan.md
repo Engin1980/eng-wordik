@@ -152,13 +152,13 @@ Co se dělá: průběh testu s výběrem z variant.
 
 Co se dělá: průběh testu se skládáním slova.
 
-- [ ] 🤖 Zobrazení českého slovíčka, prázdných míst podle délky cizího slova (včetně mezer) a nabídky písmen
-- [ ] 🤖 Hodnocení po písmenkách: správné písmeno zaplní další místo, špatné vyvolá hlášku chyby a nevloží se; vložená písmena zešednou v nabídce
-- [ ] 🤖 Hodnocení celého slova: klepnutím na vložené písmeno se vrátí do nabídky, tlačítko „Potvrdit“ je dostupné kdykoliv, po chybě se zobrazí informace a správné znění
-- [ ] 🤖 Pokračování: po slově bez chyby automaticky po intervalu (+ „Dál“), po slově s chybou povinné „Dál“
-- [ ] 🤖 Ukončení testu stejně jako v režimu 1
-- [ ] 🤖 Zvládnutí dlouhých frází na malé obrazovce (zalamování míst a tlačítek)
-- [ ] 🤖 ViewModel testy: oba způsoby hodnocení, povinné „Dál“ po chybě, automatický přechod po úspěchu
+- [x] 🤖 Zobrazení českého slovíčka, prázdných míst podle délky cizího slova (včetně mezer) a nabídky písmen
+- [x] 🤖 Hodnocení po písmenkách: správné písmeno zaplní další místo, špatné vyvolá hlášku chyby a nevloží se; vložená písmena zešednou v nabídce
+- [x] 🤖 Hodnocení celého slova: klepnutím na vložené písmeno se vrátí do nabídky, tlačítko „Potvrdit“ je dostupné kdykoliv, po chybě se zobrazí informace a správné znění
+- [x] 🤖 Pokračování: po slově bez chyby automaticky po intervalu (+ „Dál“), po slově s chybou povinné „Dál“
+- [x] 🤖 Ukončení testu stejně jako v režimu 1
+- [x] 🤖 Zvládnutí dlouhých frází na malé obrazovce (zalamování míst a tlačítek)
+- [x] 🤖 ViewModel testy: oba způsoby hodnocení, povinné „Dál“ po chybě, automatický přechod po úspěchu
 
 ## Krok 12: Výsledky testu
 

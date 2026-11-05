@@ -49,6 +49,11 @@
     <string name="test_progress">Průchod %1$d · úspěšnost %2$d %%</string>
     <string name="test_quit">Ukončit</string>
     <string name="test_next">Dál</string>
+    <string name="test_confirm">Potvrdit</string>
+    <string name="assembly_space">mezera</string>
+    <string name="assembly_wrong_letter">Špatné písmeno, zkus to znovu.</string>
+    <string name="assembly_wrong_word">Špatně. Správně se to píše: %1$s</string>
+    <string name="assembly_correct">Správně!</string>
     <string name="test_error">Test se nepodařilo sestavit: vybrané sady neobsahují dost různých slovíček pro zvolený počet možností.</string>
     <string name="quit_title">Ukončit test?</string>
     <string name="quit_text">Test se přeruší a zobrazí se výsledky dosavadního průběhu. Přerušený test nelze obnovit.</string>

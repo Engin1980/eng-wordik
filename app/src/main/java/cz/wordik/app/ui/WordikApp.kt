@@ -24,6 +24,8 @@ import cz.wordik.app.ui.setup.SetSelectionScreen
 import cz.wordik.app.ui.setup.SetSelectionViewModel
 import cz.wordik.app.ui.setup.TestSetupScreen
 import cz.wordik.app.ui.setup.TestSetupViewModel
+import cz.wordik.app.ui.test.AssemblyTestScreen
+import cz.wordik.app.ui.test.AssemblyTestViewModel
 import cz.wordik.app.ui.test.ChoiceTestScreen
 import cz.wordik.app.ui.test.ChoiceTestViewModel
 import cz.wordik.app.ui.theme.WordikTheme
@@ -93,7 +95,15 @@ private fun TestHost(screen: Screen.Test, container: AppContainer, appViewModel:
             )
             ChoiceTestScreen(vm, onFinished = finish, onAbandon = { appViewModel.back() })
         }
-        TestMode.ASSEMBLY -> PlaceholderScreen(screen) { appViewModel.open(Screen.AppSettings) }
+        TestMode.ASSEMBLY -> {
+            val vm: AssemblyTestViewModel = viewModel(
+                key = "test:${screen.runId}",
+                factory = viewModelFactory {
+                    initializer { AssemblyTestViewModel(words, screen.settings, container.config) }
+                },
+            )
+            AssemblyTestScreen(vm, onFinished = finish)
+        }
     }
 }
 
