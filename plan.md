@@ -48,14 +48,14 @@ Co se dělá: prázdná aplikace, která se sestaví, spustí a má nastavené z
 
 Co se dělá: datový model, parser souboru `česky;cizí` a načtení přibalených sad. Všechno v čistém Kotlinu, testy běží na PC.
 
-- [ ] 🤖 Model: `Word` (česky, cizí, příznak „rozlišovat velikost písmen“), `WordSet` (název, seznam slovíček)
-- [ ] 🤖 Parser: řádek `česky;cizí`, ignorování prázdných řádků, odmítnutí řádku bez `;` nebo s více `;`, ořezání mezer
-- [ ] 🤖 Zpracování uvozovek kolem cizího slovíčka (příznak se nastaví, uvozovky se odstraní)
-- [ ] 🤖 Zpracování chyb: srozumitelná chyba s číslem řádku, aby se špatná sada dala opravit
-- [ ] 🤖 Dvě ukázkové sady CZ-EN po cca 12 slovíčkách v `assets/sets/` (název sady = název souboru bez přípony), mezi nimi fráze, apostrof a slovíčko v uvozovkách
-- [ ] 🤖 `SetRepository`: načtení všech přibalených sad z assets
-- [ ] 🤖 Unit testy parseru (běžný řádek, mezery, prázdné řádky, uvozovky, diakritika, UTF-8, chybné řádky)
-- [ ] 🤖 Test, že ukázkové sady z assets jdou načíst bez chyb
+- [x] 🤖 Model: `Word` (česky, cizí, příznak „rozlišovat velikost písmen“), `WordSet` (název, seznam slovíček)
+- [x] 🤖 Parser: řádek `česky;cizí`, ignorování prázdných řádků, odmítnutí řádku bez `;` nebo s více `;`, ořezání mezer
+- [x] 🤖 Zpracování uvozovek kolem cizího slovíčka (příznak se nastaví, uvozovky se odstraní)
+- [x] 🤖 Zpracování chyb: srozumitelná chyba s číslem řádku, aby se špatná sada dala opravit
+- [x] 🤖 Dvě ukázkové sady CZ-EN po cca 12 slovíčkách v `assets/sets/` (název sady = název souboru bez přípony), mezi nimi fráze, apostrof a slovíčko v uvozovkách
+- [x] 🤖 `SetRepository`: načtení všech přibalených sad z assets
+- [x] 🤖 Unit testy parseru (běžný řádek, mezery, prázdné řádky, uvozovky, diakritika, UTF-8, chybné řádky)
+- [x] 🤖 Test, že ukázkové sady z assets jdou načíst bez chyb
 
 ## Krok 3: Konfigurace a nastavení testu
 

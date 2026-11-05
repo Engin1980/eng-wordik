@@ -1,0 +1,12 @@
+pes;dog
+kočka;cat
+kůň;horse
+ptáček;bird
+ryba;fish
+myš;mouse
+křeček;hamster
+želva;turtle
+králík;rabbit
+mořské prase;guinea pig
+sova;owl
+slon;elephant

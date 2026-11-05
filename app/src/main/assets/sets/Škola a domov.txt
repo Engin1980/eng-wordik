@@ -1,0 +1,12 @@
+škola;school
+učitel;teacher
+tužka;pencil
+sešit;notebook
+zmrzlina;ice cream
+já jsem;I'm
+být;to be
+pondělí;"Monday"
+dobré ráno;good morning
+dveře;door
+okno;window
+stůl;table
