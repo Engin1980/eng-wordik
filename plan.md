@@ -135,7 +135,7 @@ Co se dělá: obrazovky před začátkem testu.
 - [x] 🤖 Validace v UI s českými hláškami, včetně chyby „málo slovíček pro N+1 možností“ a nespuštění testu
 - [x] 🤖 Uložení nastavení při spuštění testu
 - [x] 🤖 ViewModel testy: výběr více sad, načtení uloženého nastavení, chyba N+1, výchozí hodnoty pro novou kombinaci
-- [ ] 🤖 Compose UI testy obrazovek (běží na emulátoru nebo zařízení, viz krok 14)
+- [x] 🤖 Compose UI testy obrazovek (běží na emulátoru nebo zařízení, viz krok 14)
 
 ## Krok 10: Obrazovka režimu 1
 
@@ -169,7 +169,7 @@ Co se dělá: obrazovka po skončení testu.
 - [x] 🤖 Seznam všech slovíček podle úspěšnosti od nejnižší, při shodě podle abecedy
 - [x] 🤖 Označení „Test nebyl dokončen“ při předčasném ukončení
 - [x] 🤖 Tlačítka pro návrat na výběr sad a pro opakování testu se stejným nastavením
-- [ ] 🤖 Testy formátování výsledků a Compose UI test obrazovky
+- [x] 🤖 Testy formátování výsledků a Compose UI test obrazovky
 
 ## Krok 13: Zvuky a motivační prvky
 
@@ -185,10 +185,10 @@ Co se dělá: zvuková zpětná vazba a drobná vizuální odměna.
 
 Co se dělá: důkladné ověření celé aplikace.
 
-- [ ] 🤖 Spustit všechny unit testy a lint, opravit nalezené chyby
-- [ ] 🤖 Doplnit chybějící testy hraničních případů (jedna sada, více sad, minimální a maximální hodnoty nastavení, prázdná sada, sada s jedním slovíčkem)
-- [ ] 🤖 Compose UI testy celého toku: výběr sady → nastavení → test v obou režimech → výsledky (pokud je k dispozici emulátor nebo zařízení)
-- [ ] 🤖 Zkouška na emulátoru s API 26 a s novějším API, na telefonu i tabletu, na výšku i na šířku, obě velikosti písma
+- [x] 🤖 Spustit všechny unit testy a lint, opravit nalezené chyby
+- [x] 🤖 Doplnit chybějící testy hraničních případů (jedna sada, více sad, minimální a maximální hodnoty nastavení, prázdná sada, sada s jedním slovíčkem)
+- [x] 🤖 Compose UI testy celého toku: výběr sady → nastavení → test v obou režimech → výsledky (pokud je k dispozici emulátor nebo zařízení)
+- [ ] 🤖 Zkouška na emulátoru s API 26 a s novějším API, na telefonu i tabletu, na výšku i na šířku, obě velikosti písma (částečně: API 26 tablet a API 37 telefon, tablet na šířku s velkým písmem; zbývá API 35, výška, telefon na šířku)
 - [ ] 👤 Ruční zkouška na skutečném zařízení (ovládání dítětem, čitelnost fontu, zvuky, velikost tlačítek)
 - [ ] 🤖 Opravit nalezené chyby podle zpětné vazby
 - [ ] 🤖 Projít `task.md` bod po bodu a ověřit, že je vše splněno
