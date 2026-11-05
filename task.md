@@ -20,8 +20,13 @@ Tento dokument popisuje **co má aplikace dělat**, ne jak se bude vyvíjet. Pl�
 - Cizí slovíčko může být celé uzavřeno v uvozovkách. Uvozovky jsou jen příznak, že se v režimu 2 rozlišuje velikost písmen. Nezobrazují se ani se neskládají.
 - Jazyk cizí strany se v sadě neurčuje (doplní se až při budoucím importu sad).
 - Typická sada má kolem 12 slovíček, maximálně nižší desítky.
-- **Zdroj sad:** zatím jsou sady přibalené přímo v aplikaci. Pro vývoj a testy vzniknou 2 ukázkové sady po cca 12 slovíčkách (CZ-EN). Skutečné sady se dodají později ve stejném formátu. Jednoduché doplňování dalších sad se dořeší později (viz TODO).
-- Sady se v aplikaci neupravují, nemažou ani nepřejmenovávají.
+- **Zdroj sad:** sady jsou uložené v úložišti aplikace (jeden soubor `název.txt` na sadu). Při prvním spuštění se do něj zkopírují 2 přibalené ukázkové sady po cca 12 slovíčkách (CZ-EN); po smazání se znovu neobjeví.
+- **Správa sad:** uživatel může sadu vytvořit, upravit a smazat; přejmenování sady zatím není.
+  - **Název sady** musí být neprázdný, unikátní (bez ohledu na velikost písmen), nejvýše 60 znaků, bez znaků `\ / : * ? " < > |` a nesmí končit tečkou.
+  - **Nová sada:** po zadání názvu vznikne prázdná sada a otevře se editace.
+  - **Editace:** jednoduchý textový editor se slovíčky jako volný text `česky;cizí` po řádcích (slovíčko s rozlišením velikosti písmen má cizí část v uvozovkách). Uživatel změny uloží, nebo zahodí (zahození neuložených změn se potvrzuje). Text s chybou se neuloží; zobrazí se chyby s čísly řádků. Prázdnou sadu uložit lze.
+  - **Smazání** sady vyžaduje potvrzení.
+  - **Import přes QR kód:** po zadání názvu se otevře skener (kamera, vyžaduje povolení). QR kód obsahuje UTF-8 text `česky;cizí` po řádcích. Lze naskenovat více kódů za sebou (bez pořadí); slova se sloučí a duplicity (shodné české i cizí znění) se vynechají. Po „Hotovo“ se pokračuje editací naskenovaného textu, sada se vytvoří až uložením.
 - Do jednoho testu lze vybrat více sad najednou.
 
 ## Test
@@ -131,11 +136,11 @@ Historie testů se neukládá (viz TODO).
 
 ## TODO (budoucí rozšíření, zatím neřešit)
 
-- Jednoduchý způsob, jak do aplikace dostat další sady slovíček (import / stahování). Spolu s tím určení jazyka sady.
+- Stahování sad z internetu a určení jazyka sady (import přes QR kód už je).
 - Obrázky u slovíček.
 - Přehrání cizího slovíčka po ohodnocení pomocí TTS, pokud je TTS pro daný jazyk k dispozici.
 - Opakování obtížných slovíček (spaced repetition).
 - Historie testů a graf pokroku.
-- Editace, mazání a přejmenování sad.
+- Přejmenování sad.
 - Publikace na Google Play.
 - Lokalizace aplikace a tmavý režim.

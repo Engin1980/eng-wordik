@@ -10,7 +10,7 @@
     <string name="set_new_title">Nová sada</string>
     <string name="set_import_title">Import sady z QR kódu</string>
     <string name="set_name_label">Název sady</string>
-    <string name="set_name_confirm">Pokračovat</string>
+    <string name="set_name_confirm">Potvrdit název</string>
     <string name="set_name_error_empty">Zadejte název sady.</string>
     <string name="set_name_error_duplicate">Sada s tímto názvem už existuje.</string>
     <string name="set_name_error_chars">Název nesmí obsahovat znaky %1$s ani končit tečkou.</string>
