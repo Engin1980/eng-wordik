@@ -82,14 +82,14 @@ Co se dělá: pamatování posledního nastavení pro kombinaci sad a nastavení
 
 Co se dělá: stavový automat testu nezávislý na režimu: pořadí slovíček, průchody, podmínka konce, statistiky a výsledky.
 
-- [ ] 🤖 `TestSession`: fronta slovíček na průchod, každé právě jednou, v náhodném pořadí; náhodnost vložená zvenku (seed pro testy)
-- [ ] 🤖 Zaznamenání výsledku odpovědi (správně / špatně, u písmen počty správných a chybných)
-- [ ] 🤖 Podmínka konce kontrolovaná po každém slovíčku: dokončené průchody ≥ minimum A celková úspěšnost ≥ minimum
-- [ ] 🤖 Výpočet úspěšnosti: správné odpovědi / všechny odpovědi, resp. správná písmena / (správná + chybná)
-- [ ] 🤖 Pokračování dalšími průchody, dokud nejsou podmínky splněny
-- [ ] 🤖 Předčasné ukončení a příznak „Test nebyl dokončen“
-- [ ] 🤖 `TestResult`: počty, procento, chybná slovíčka, doba trvání (hodiny vložené zvenku), seznam slovíček podle úspěšnosti vzestupně, při shodě podle abecedy
-- [ ] 🤖 Unit testy: konec uprostřed třetího průchodu, procento dosaženo dřív než průchody, procento nedosaženo → další průchod, předčasné ukončení, řazení výsledků, sloučení více sad, deterministické pořadí při pevném seedu
+- [x] 🤖 `TestSession`: fronta slovíček na průchod, každé právě jednou, v náhodném pořadí; náhodnost vložená zvenku (seed pro testy)
+- [x] 🤖 Zaznamenání výsledku odpovědi (správně / špatně, u písmen počty správných a chybných)
+- [x] 🤖 Podmínka konce kontrolovaná po každém slovíčku: dokončené průchody ≥ minimum A celková úspěšnost ≥ minimum
+- [x] 🤖 Výpočet úspěšnosti: správné odpovědi / všechny odpovědi, resp. správná písmena / (správná + chybná)
+- [x] 🤖 Pokračování dalšími průchody, dokud nejsou podmínky splněny
+- [x] 🤖 Předčasné ukončení a příznak „Test nebyl dokončen“
+- [x] 🤖 `TestResult`: počty, procento, chybná slovíčka, doba trvání (hodiny vložené zvenku), seznam slovíček podle úspěšnosti vzestupně, při shodě podle abecedy
+- [x] 🤖 Unit testy: konec uprostřed třetího průchodu, procento dosaženo dřív než průchody, procento nedosaženo → další průchod, předčasné ukončení, řazení výsledků, sloučení více sad, deterministické pořadí při pevném seedu
 
 ## Krok 6: Logika režimu 1 (výběr z variant)
 
