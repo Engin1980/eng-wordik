@@ -25,22 +25,24 @@ Na tomto počítači (kde vznikl plán) není Java, Android SDK ani Gradle. Real
 Co se dělá: na cílovém stroji se ověří, že jsou k dispozici nástroje pro sestavení a spuštění testů. Nic se neinstaluje.
 
 - [x] 👤 Odpovědět na otázky v `questions.md`
-- [ ] 👤 Připravit cílový stroj: JDK 17, Android SDK (platforma API 34/35, build-tools), případně emulátor nebo zařízení s API 26 a novějším
-- [ ] 👤 Založit git repozitář
-- [ ] 🤖 Ověřit nástroje na cílovém stroji: `java -version`, `ANDROID_HOME`, `sdkmanager --list`, `adb devices`
-- [ ] 🤖 Přidat `.gitignore` (Gradle, IDE, `local.properties`, keystore)
+- [x] 👤 Připravit cílový stroj: JDK 17, Android SDK (platforma API 34/35, build-tools), případně emulátor nebo zařízení s API 26 a novějším
+  - Ověřeno: JDK 21.0.8 (`JAVA_HOME`, není v `PATH`), SDK platformy 26 a 37.0, build-tools 36.0.0, AVD `Medium_Tablet_API_26`, `Pixel_Tablet_API_35`, `Medium_Phone_API_37.0`. Místo JDK 17 je JDK 21 (stačí pro AGP 8.x); platformy 34/35 chybí, použije se `compileSdk` 36/37 (případně se platforma doinstaluje v kroku 1).
+- [x] 👤 Založit git repozitář
+- [x] 🤖 Ověřit nástroje na cílovém stroji: `java -version`, `ANDROID_HOME`, `sdkmanager --list`, `adb devices`
+  - `java` není v `PATH` (funguje přes `JAVA_HOME`), `adb` a `sdkmanager` také ne (jsou v `ANDROID_HOME\platform-tools` a `cmdline-tools\latest\bin`). `adb devices`: žádné připojené zařízení, emulátor je nutné spustit (AVD viz výše). Gradle není globálně, použije se wrapper.
+- [x] 🤖 Přidat `.gitignore` (Gradle, IDE, `local.properties`, keystore)
 
 ## Krok 1: Kostra projektu
 
 Co se dělá: prázdná aplikace, která se sestaví, spustí a má nastavené základní nástroje.
 
-- [ ] 🤖 Vytvořit Gradle projekt (Kotlin DSL, version catalog `libs.versions.toml`, Gradle wrapper)
-- [ ] 🤖 Modul `app`: `minSdk 26`, `targetSdk` dle aktuálního požadavku Google Play, Kotlin, Jetpack Compose, Material 3, dočasný `applicationId` `cz.wordik.app` (změnit před krokem 16)
-- [ ] 🤖 Zvolit strukturu balíčků: `domain` (čistá logika bez Androidu), `data` (načítání sad, nastavení), `ui` (Compose obrazovky, ViewModely)
-- [ ] 🤖 Nastavit testovací závislosti (JUnit 5 nebo 4, kotlinx-coroutines-test, případně Turbine, Compose UI test)
-- [ ] 🤖 Prázdná obrazovka „Wordík“ a název aplikace v zdrojích
-- [ ] 🤖 Ověřit `./gradlew assembleDebug`, `./gradlew test` a `./gradlew lint`
-- [ ] 🤖 Doplnit do `CLAUDE.md` skutečné příkazy (build, test, spuštění jednoho testu)
+- [x] 🤖 Vytvořit Gradle projekt (Kotlin DSL, version catalog `libs.versions.toml`, Gradle wrapper)
+- [x] 🤖 Modul `app`: `minSdk 26`, `targetSdk` dle aktuálního požadavku Google Play, Kotlin, Jetpack Compose, Material 3, dočasný `applicationId` `cz.wordik.app` (změnit před krokem 16)
+- [x] 🤖 Zvolit strukturu balíčků: `domain` (čistá logika bez Androidu), `data` (načítání sad, nastavení), `ui` (Compose obrazovky, ViewModely)
+- [x] 🤖 Nastavit testovací závislosti (JUnit 5 nebo 4, kotlinx-coroutines-test, případně Turbine, Compose UI test)
+- [x] 🤖 Prázdná obrazovka „Wordík“ a název aplikace v zdrojích
+- [x] 🤖 Ověřit `./gradlew assembleDebug`, `./gradlew test` a `./gradlew lint`
+- [x] 🤖 Doplnit do `CLAUDE.md` skutečné příkazy (build, test, spuštění jednoho testu)
 
 ## Krok 2: Model slovíček a načítání sad
 

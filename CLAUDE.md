@@ -4,7 +4,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Current state
 
-The repository contains only a specification, `task.md` (written in Czech). There is no source code, build system, test setup or git history yet, so there are no build, lint or test commands to document. When the project is scaffolded, add those commands here.
+Gradle projekt (Kotlin DSL, version catalog `gradle/libs.versions.toml`, AGP 9.4.1 s vestavěným Kotlinem, Gradle wrapper 9.6.0), jeden modul `app`. Plán realizace je v `plan.md` (zaškrtává se až po ověření), specifikace v `task.md`.
+
+- `applicationId` je dočasně `cz.wordik.app` (změnit před krokem 16), `minSdk 26`, `compileSdk`/`targetSdk` 37, Compose + Material 3, testy JUnit 4 + coroutines-test + Turbine.
+- Balíčky v `app/src/main/java/cz/wordik/app/`: `domain` (čistá logika bez Androidu), `data` (načítání sad, nastavení), `ui` (Compose obrazovky, ViewModely).
+- `local.properties` (cesta k SDK) je mimo git; na Windows musí mít `sdk.dir=C\:\\Users\\...` (zdvojená zpětná lomítka) (jinak selže lint `PropertyEscape`). `JAVA_HOME` ukazuje na JDK 21.
+
+## Commands
+
+Na Windows `gradlew.bat` (v Git Bash `./gradlew.bat`).
+
+- Sestavení debug APK: `./gradlew.bat assembleDebug`
+- Unit testy: `./gradlew.bat test`
+- Jeden test: `./gradlew.bat testDebugUnitTest --tests "cz.wordik.app.SanityTest"`
+- Lint: `./gradlew.bat lint`
+- Vše najednou: `./gradlew.bat assembleDebug test lint`
+- Instrumentované testy (potřebují běžící emulátor/zařízení): `./gradlew.bat connectedDebugAndroidTest`
+- Emulátory (AVD): `Medium_Tablet_API_26`, `Pixel_Tablet_API_35`, `Medium_Phone_API_37.0`; `adb` je v `%ANDROID_HOME%\platform-tools`.
 
 ## What is being built (from `task.md`)
 
