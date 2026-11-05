@@ -40,4 +40,15 @@ class ResultFormatTest {
         assertEquals("1 s", ResultFormat.duration(1_400))
         assertEquals("0 s", ResultFormat.duration(-5))
     }
+
+    @Test
+    fun `hvezdicky podle uspesnosti`() {
+        assertEquals(0, ResultFormat.stars(completed = false, rate = 1.0))
+        assertEquals(1, ResultFormat.stars(true, 0.0))
+        assertEquals(1, ResultFormat.stars(true, 0.69))
+        assertEquals(2, ResultFormat.stars(true, 0.7))
+        assertEquals(2, ResultFormat.stars(true, 0.89))
+        assertEquals(3, ResultFormat.stars(true, 0.9))
+        assertEquals(3, ResultFormat.stars(true, 1.0))
+    }
 }

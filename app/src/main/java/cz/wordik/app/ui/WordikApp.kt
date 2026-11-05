@@ -94,7 +94,7 @@ private fun TestHost(screen: Screen.Test, container: AppContainer, appViewModel:
             val vm: ChoiceTestViewModel = viewModel(
                 key = "test:${screen.runId}",
                 factory = viewModelFactory {
-                    initializer { ChoiceTestViewModel(words, screen.settings, container.config) }
+                    initializer { ChoiceTestViewModel(words, screen.settings, container.config, sounds = container.soundPlayer) }
                 },
             )
             ChoiceTestScreen(vm, onFinished = finish, onAbandon = { appViewModel.back() })
@@ -103,7 +103,7 @@ private fun TestHost(screen: Screen.Test, container: AppContainer, appViewModel:
             val vm: AssemblyTestViewModel = viewModel(
                 key = "test:${screen.runId}",
                 factory = viewModelFactory {
-                    initializer { AssemblyTestViewModel(words, screen.settings, container.config) }
+                    initializer { AssemblyTestViewModel(words, screen.settings, container.config, sounds = container.soundPlayer) }
                 },
             )
             AssemblyTestScreen(vm, onFinished = finish)

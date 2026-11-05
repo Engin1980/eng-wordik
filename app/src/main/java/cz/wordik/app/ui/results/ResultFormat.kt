@@ -20,5 +20,13 @@ object ResultFormat {
         }
     }
 
+    /** Počet hvězdiček odměny (0 až 3): jen za dokončený test, aspoň jedna, 2 od 70 %, 3 od 90 %. */
+    fun stars(completed: Boolean, rate: Double): Int = when {
+        !completed -> 0
+        rate >= 0.9 -> 3
+        rate >= 0.7 -> 2
+        else -> 1
+    }
+
     private fun Int.pad() = toString().padStart(2, '0')
 }

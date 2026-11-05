@@ -11,6 +11,9 @@ import cz.wordik.app.domain.TestResult
 import cz.wordik.app.domain.TestSession
 import cz.wordik.app.domain.TestSettings
 import cz.wordik.app.domain.Word
+import cz.wordik.app.sound.NoSoundPlayer
+import cz.wordik.app.sound.Sound
+import cz.wordik.app.sound.SoundPlayer
 import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlinx.coroutines.Job
@@ -53,6 +56,7 @@ class AssemblyTestViewModel(
     settings: TestSettings,
     private val config: AppConfig,
     random: Random = Random.Default,
+    private val sounds: SoundPlayer = NoSoundPlayer,
     clock: () -> Long = System::currentTimeMillis,
 ) : ViewModel() {
 
@@ -69,6 +73,7 @@ class AssemblyTestViewModel(
 
     private var autoAdvance: Job? = null
     private var letterError = false
+    private var finishSoundPlayed = false
 
     init {
         refresh()
@@ -76,8 +81,15 @@ class AssemblyTestViewModel(
 
     fun onTileClick(tileId: Int) {
         when (test.press(tileId)) {
-            PressResult.PLACED -> letterError = false
-            PressResult.WRONG -> letterError = true
+            PressResult.PLACED -> {
+                letterError = false
+                // Po písmenkách se hotové slovo bez chyby ohlásí zvukem správné odpovědi.
+                if (test.round?.advancesAutomatically == true) sounds.play(Sound.CORRECT)
+            }
+            PressResult.WRONG -> {
+                letterError = true
+                sounds.play(Sound.WRONG)
+            }
             PressResult.IGNORED -> return
         }
         afterChange()
@@ -89,7 +101,9 @@ class AssemblyTestViewModel(
     }
 
     fun onConfirm() {
-        if (test.confirm() != null) afterChange()
+        val correct = test.confirm() ?: return
+        sounds.play(if (correct) Sound.CORRECT else Sound.WRONG)
+        afterChange()
     }
 
     /** "Dál": po slově bez chyby dřív než automaticky, po slově s chybou povinné. */
@@ -124,6 +138,7 @@ class AssemblyTestViewModel(
     }
 
     private fun refresh() {
+        playFinishSound()
         val round = test.round
         _state.value = AssemblyUiState(
             prompt = round?.word?.czech.orEmpty(),
@@ -138,5 +153,12 @@ class AssemblyTestViewModel(
             successPercent = (test.session.successRate * 100).roundToInt(),
             result = if (test.isFinished) test.result() else null,
         )
+    }
+
+    /** Fanfára jen při dokončení testu (ne při předčasném ukončení), a jen jednou. */
+    private fun playFinishSound() {
+        if (!test.isFinished || finishSoundPlayed) return
+        finishSoundPlayed = true
+        if (test.result().completed) sounds.play(Sound.FINISH)
     }
 }

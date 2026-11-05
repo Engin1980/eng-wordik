@@ -2,7 +2,9 @@ package cz.wordik.app.ui
 
 import cz.wordik.app.domain.Evaluation
 import cz.wordik.app.domain.Word
+import cz.wordik.app.sound.Sound
 import cz.wordik.app.testutil.MainDispatcherRule
+import cz.wordik.app.testutil.RecordingSoundPlayer
 import cz.wordik.app.testutil.TestData
 import cz.wordik.app.ui.test.AssemblyTestViewModel
 import cz.wordik.app.ui.test.AssemblyUiState
@@ -281,5 +283,66 @@ class AssemblyTestViewModelTest {
         assertTrue(vm.state.value.tiles.any { it.char == ' ' })
         vm.type("ice cream")
         assertTrue(vm.state.value.done)
+    }
+
+    // --- zvuky ---
+
+    private fun vmWithSounds(sounds: RecordingSoundPlayer, evaluation: Evaluation, extra: Int = 0) =
+        AssemblyTestViewModel(
+            words,
+            TestData.defaults.copy(evaluation = evaluation, minPasses = 1, minSuccessPercent = 100, extraLetters = extra),
+            TestData.config,
+            Random(5),
+            sounds,
+        ) { now }
+
+    @Test
+    fun `po pismenkach spatne pismeno hraje chybu a hotove slovo bez chyby spravne`() = runTest {
+        val sounds = RecordingSoundPlayer()
+        val vm = vmWithSounds(sounds, Evaluation.PER_LETTER, extra = 5)
+        val target = vm.target()
+        vm.onTileClick(vm.state.value.tiles.first { !it.used && it.char != target[0] }.id)
+        assertEquals(listOf(Sound.WRONG), sounds.played)
+        vm.type(target)
+        // slovo mělo chybu, takže "správně" nezní
+        assertEquals(listOf(Sound.WRONG), sounds.played)
+        vm.onNext()
+
+        vm.type(vm.target())
+        assertEquals(listOf(Sound.WRONG, Sound.CORRECT), sounds.played)
+    }
+
+    @Test
+    fun `cele slovo hraje zvuk az po potvrzeni`() = runTest {
+        val sounds = RecordingSoundPlayer()
+        val vm = vmWithSounds(sounds, Evaluation.WHOLE_WORD)
+        vm.type(vm.target())
+        assertTrue(sounds.played.isEmpty())
+        vm.onConfirm()
+        assertEquals(listOf(Sound.CORRECT), sounds.played)
+        vm.onNext()
+        vm.onConfirm() // nevyplněné => chyba
+        assertEquals(listOf(Sound.CORRECT, Sound.WRONG), sounds.played)
+    }
+
+    @Test
+    fun `fanfara hraje jednou na konci dokonceneho testu`() = runTest {
+        val sounds = RecordingSoundPlayer()
+        val vm = vmWithSounds(sounds, Evaluation.PER_LETTER)
+        repeat(words.size) {
+            vm.type(vm.target())
+            vm.onNext()
+        }
+        assertEquals(1, sounds.played.count { it == Sound.FINISH })
+        assertEquals(Sound.FINISH, sounds.played.last())
+    }
+
+    @Test
+    fun `fanfara nehraje pri predcasnem ukonceni`() = runTest {
+        val sounds = RecordingSoundPlayer()
+        val vm = vmWithSounds(sounds, Evaluation.PER_LETTER)
+        vm.tapChar(vm.target()[0])
+        vm.onQuit()
+        assertTrue(sounds.played.none { it == Sound.FINISH })
     }
 }

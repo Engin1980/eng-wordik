@@ -175,11 +175,11 @@ Co se dělá: obrazovka po skončení testu.
 
 Co se dělá: zvuková zpětná vazba a drobná vizuální odměna.
 
-- [ ] 🤖 Zvuky (správně, chyba, konec testu) vygenerované skriptem ze syntetických tónů, bez licenčních omezení
-- [ ] 🤖 Přehrávání přes `SoundPool`, předběžné načtení, žádné vibrace
-- [ ] 🤖 Zvuky respektují hlasitost zařízení, bez vlastního vypínače
-- [ ] 🤖 Jednoduché vizuální odměny (barvy, ikona, krátká animace po dokončení), aby nezhoršily použitelnost
-- [ ] 🤖 Zvukovou službu oddělit rozhraním, aby šla v testech nahradit
+- [x] 🤖 Zvuky (správně, chyba, konec testu) vygenerované skriptem ze syntetických tónů, bez licenčních omezení
+- [x] 🤖 Přehrávání přes `SoundPool`, předběžné načtení, žádné vibrace
+- [x] 🤖 Zvuky respektují hlasitost zařízení, bez vlastního vypínače
+- [x] 🤖 Jednoduché vizuální odměny (barvy, ikona, krátká animace po dokončení), aby nezhoršily použitelnost
+- [x] 🤖 Zvukovou službu oddělit rozhraním, aby šla v testech nahradit
 
 ## Krok 14: Testování a ladění
 

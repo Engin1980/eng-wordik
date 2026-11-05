@@ -9,6 +9,9 @@ import cz.wordik.app.domain.TestResult
 import cz.wordik.app.domain.TestSession
 import cz.wordik.app.domain.TestSettings
 import cz.wordik.app.domain.Word
+import cz.wordik.app.sound.NoSoundPlayer
+import cz.wordik.app.sound.Sound
+import cz.wordik.app.sound.SoundPlayer
 import kotlin.math.roundToInt
 import kotlin.random.Random
 import kotlinx.coroutines.Job
@@ -40,6 +43,7 @@ class ChoiceTestViewModel(
     settings: TestSettings,
     private val config: AppConfig,
     random: Random = Random.Default,
+    private val sounds: SoundPlayer = NoSoundPlayer,
     clock: () -> Long = System::currentTimeMillis,
 ) : ViewModel() {
 
@@ -54,6 +58,7 @@ class ChoiceTestViewModel(
     val state: StateFlow<ChoiceUiState> = _state.asStateFlow()
 
     private var autoAdvance: Job? = null
+    private var finishSoundPlayed = false
 
     init {
         refresh()
@@ -62,6 +67,7 @@ class ChoiceTestViewModel(
     fun onOptionClick(index: Int) {
         val t = test ?: return
         val correct = t.answer(index) ?: return
+        sounds.play(if (correct) Sound.CORRECT else Sound.WRONG)
         refresh()
         if (correct) {
             autoAdvance = viewModelScope.launch {
@@ -92,6 +98,7 @@ class ChoiceTestViewModel(
 
     private fun refresh() {
         val t = test ?: return
+        playFinishSound(t)
         val question = t.question
         val answered = t.answeredIndex
         _state.value = ChoiceUiState(
@@ -104,5 +111,12 @@ class ChoiceTestViewModel(
             successPercent = (t.session.successRate * 100).roundToInt(),
             result = if (t.isFinished) t.result() else null,
         )
+    }
+
+    /** Fanfára jen při dokončení testu (ne při předčasném ukončení), a jen jednou. */
+    private fun playFinishSound(t: ChoiceTest) {
+        if (!t.isFinished || finishSoundPlayed) return
+        finishSoundPlayed = true
+        if (t.result().completed) sounds.play(Sound.FINISH)
     }
 }

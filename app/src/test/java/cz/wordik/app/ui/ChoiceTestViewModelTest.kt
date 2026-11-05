@@ -4,7 +4,9 @@ import cz.wordik.app.domain.Direction
 import cz.wordik.app.domain.TestMode
 import cz.wordik.app.domain.TestSettings
 import cz.wordik.app.domain.Word
+import cz.wordik.app.sound.Sound
 import cz.wordik.app.testutil.MainDispatcherRule
+import cz.wordik.app.testutil.RecordingSoundPlayer
 import cz.wordik.app.testutil.TestData
 import cz.wordik.app.ui.test.ChoiceTestViewModel
 import kotlin.random.Random
@@ -222,5 +224,54 @@ class ChoiceTestViewModelTest {
         vm.onNext()
         vm.onQuit()
         assertTrue(vm.state.value.error)
+    }
+
+    // --- zvuky ---
+
+    private fun vmWithSounds(sounds: RecordingSoundPlayer, s: TestSettings = settings) =
+        ChoiceTestViewModel(words, s, TestData.config, Random(2), sounds) { now }
+
+    @Test
+    fun `spravna odpoved hraje zvuk spravne a chybna zvuk chyby`() = runTest {
+        val sounds = RecordingSoundPlayer()
+        val vm = vmWithSounds(sounds)
+        vm.answerCorrect()
+        vm.onNext()
+        vm.answerWrong()
+        assertEquals(listOf(Sound.CORRECT, Sound.WRONG), sounds.played)
+    }
+
+    @Test
+    fun `fanfara hraje jednou pri dokonceni testu`() = runTest {
+        val sounds = RecordingSoundPlayer()
+        val vm = vmWithSounds(sounds)
+        repeat(words.size) {
+            vm.answerCorrect()
+            vm.onNext()
+        }
+        assertEquals(words.size, sounds.played.count { it == Sound.CORRECT })
+        assertEquals(1, sounds.played.count { it == Sound.FINISH })
+        assertEquals(Sound.FINISH, sounds.played.last())
+        vm.onNext()
+        vm.onQuit()
+        assertEquals(1, sounds.played.count { it == Sound.FINISH })
+    }
+
+    @Test
+    fun `pri predcasnem ukonceni fanfara nehraje`() = runTest {
+        val sounds = RecordingSoundPlayer()
+        val vm = vmWithSounds(sounds)
+        vm.answerCorrect()
+        vm.onQuit()
+        assertEquals(listOf(Sound.CORRECT), sounds.played)
+    }
+
+    @Test
+    fun `ignorovana druha odpoved zvuk nehraje`() = runTest {
+        val sounds = RecordingSoundPlayer()
+        val vm = vmWithSounds(sounds)
+        vm.answerWrong()
+        vm.answerCorrect()
+        assertEquals(listOf(Sound.WRONG), sounds.played)
     }
 }

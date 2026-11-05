@@ -9,6 +9,8 @@ import cz.wordik.app.domain.SizeLevel
 import cz.wordik.app.domain.TestMode
 import cz.wordik.app.domain.TestSettings
 import cz.wordik.app.domain.AppConfig
+import cz.wordik.app.sound.Sound
+import cz.wordik.app.sound.SoundPlayer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -60,4 +62,12 @@ object TestData {
     val ranges = SettingsRanges(1..8, 1..10, 1..100, 0..10)
 
     val config = AppConfig(defaults, ranges, autoAdvanceMillis = 1000, fontName = "Atkinson Hyperlegible")
+}
+
+/** Zaznamenává přehrané zvuky. */
+class RecordingSoundPlayer : SoundPlayer {
+    val played = mutableListOf<Sound>()
+    override fun play(sound: Sound) {
+        played += sound
+    }
 }
