@@ -53,6 +53,10 @@ class AssemblyRound(
     var isDone = false
         private set
 
+    /** Slovo bylo přeskočeno ([giveUp]); zbylá písmena se doplnila jako správné řešení. */
+    var gaveUp = false
+        private set
+
     /** Po slově s chybou je tlačítko "Dál" povinné a automatický přechod se nepoužije. */
     val needsManualNext: Boolean get() = isDone && hadError
 
@@ -100,6 +104,39 @@ class AssemblyRound(
                 }
             }
         }
+    }
+
+    /**
+     * Napovězení (jen po písmenkách): doplní další písmeno a započítá jednu chybu; samotné
+     * doplněné písmeno se jako správné nepočítá. Vrací true, pokud se písmeno doplnilo.
+     */
+    fun hint(): Boolean {
+        if (evaluation != Evaluation.PER_LETTER || isDone) return false
+        fillNext()
+        wrongUnits++
+        if (filledCount == target.length) isDone = true
+        return true
+    }
+
+    /**
+     * Přeskočení slova (jen po písmenkách): za každé dosud nedoplněné písmeno se započítá chyba
+     * a zbytek se doplní jako správné řešení. Vrací true, pokud se slovo přeskočilo.
+     */
+    fun giveUp(): Boolean {
+        if (evaluation != Evaluation.PER_LETTER || isDone) return false
+        wrongUnits += target.length - filledCount
+        while (filledCount < target.length) fillNext()
+        gaveUp = true
+        isDone = true
+        return true
+    }
+
+    /** Doplní do prvního volného místa nepoužitou klávesu s očekávaným písmenem. */
+    private fun fillNext() {
+        val position = slots.indexOfFirst { it == null }
+        val expected = target[position]
+        slots[position] = tiles.firstOrNull { !isUsed(it) && it.char == expected }
+            ?: tiles.first { !isUsed(it) && matches(expected, it.char) }
     }
 
     /** Vrátí vložené písmeno do nabídky (jen při hodnocení celého slova, před potvrzením). */
@@ -154,6 +191,10 @@ class AssemblyTest(
     fun remove(slotIndex: Int): Boolean = track { it.remove(slotIndex) } ?: false
 
     fun confirm(): Boolean? = track { it.confirm() }
+
+    fun hint(): Boolean = track { it.hint() } ?: false
+
+    fun giveUp(): Boolean = track { it.giveUp() } ?: false
 
     /** Přejde na další slovíčko; funguje jen po vyhodnoceném slově. */
     fun next() {

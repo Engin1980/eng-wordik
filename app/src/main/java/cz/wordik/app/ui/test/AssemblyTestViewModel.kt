@@ -38,6 +38,10 @@ data class AssemblyUiState(
     /** Slovo je vyhodnoceno (po písmenkách zaplněno, jinak potvrzeno). */
     val done: Boolean = false,
     val hadError: Boolean = false,
+    /** Slovo bylo přeskočeno a doplnilo se správné řešení. */
+    val gaveUp: Boolean = false,
+    /** Všechna místa jsou vyplněná (u celého slova před potvrzením). */
+    val complete: Boolean = false,
     /** Poslední klepnutí bylo špatné písmeno (hodnocení po písmenkách). */
     val letterError: Boolean = false,
     /** Správné znění, zobrazí se po vyhodnocení slova s chybou. */
@@ -109,6 +113,23 @@ class AssemblyTestViewModel(
         afterChange()
     }
 
+    /** "Napověz" (po písmenkách): doplní další písmeno a započítá chybu. */
+    fun onHint() {
+        if (test.hint()) {
+            letterError = false
+            afterChange()
+        }
+    }
+
+    /** Přeskočení slova (po písmenkách): zbylá písmena se započítají jako chyby a zobrazí se řešení. */
+    fun onSkip() {
+        if (test.giveUp()) {
+            letterError = false
+            sounds.play(Sound.WRONG)
+            afterChange()
+        }
+    }
+
     /** "Dál": po slově bez chyby dřív než automaticky, po slově s chybou povinné. */
     fun onNext() {
         autoAdvance?.cancel()
@@ -150,6 +171,8 @@ class AssemblyTestViewModel(
             tiles = round?.tiles?.map { TileUi(it.id, it.char, round.isUsed(it)) }.orEmpty(),
             done = round?.isDone ?: false,
             hadError = round?.hadError ?: false,
+            gaveUp = round?.gaveUp ?: false,
+            complete = round?.let { it.filledCount == it.target.length } ?: false,
             letterError = letterError,
             correctAnswer = round?.takeIf { it.needsManualNext }?.target,
             pass = test.session.completedPasses + 1,

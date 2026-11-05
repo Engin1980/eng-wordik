@@ -54,6 +54,13 @@
     <string name="assembly_space">mezera</string>
     <string name="assembly_wrong_letter">Špatné písmeno, zkus to znovu.</string>
     <string name="assembly_wrong_word">Špatně. Správně se to píše: %1$s</string>
+    <string name="assembly_corrected">Nyní je řešení správné.</string>
+    <string name="assembly_gave_up">Správné řešení: %1$s</string>
+    <string name="assembly_hint">Napověz</string>
+    <string name="continue_title">Opravdu pokračovat?</string>
+    <string name="continue_text">Slovo není dokončené. Započítá se jako chyba a zobrazí se správné řešení.</string>
+    <string name="continue_confirm">Ano, pokračovat</string>
+    <string name="continue_cancel">Zpět</string>
     <string name="assembly_correct">Správně!</string>
     <string name="test_error">Test se nepodařilo sestavit: vybrané sady neobsahují dost různých slovíček pro zvolený počet možností.</string>
     <string name="quit_title">Ukončit test?</string>

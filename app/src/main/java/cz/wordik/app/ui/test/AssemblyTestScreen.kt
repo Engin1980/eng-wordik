@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,6 +34,7 @@ import cz.wordik.app.R
 import cz.wordik.app.domain.Evaluation
 import cz.wordik.app.domain.TestResult
 import cz.wordik.app.ui.components.BigButton
+import cz.wordik.app.ui.components.BigOutlinedButton
 import cz.wordik.app.ui.components.PassProgress
 import cz.wordik.app.ui.components.ScreenScaffold
 import cz.wordik.app.ui.theme.LocalFeedbackColors
@@ -65,6 +67,8 @@ fun AssemblyTestScreen(
         onSlot = viewModel::onSlotClick,
         onConfirm = viewModel::onConfirm,
         onNext = viewModel::onNext,
+        onSkip = viewModel::onSkip,
+        onHint = viewModel::onHint,
         onQuit = { confirmQuit = true },
     )
 }
@@ -77,9 +81,22 @@ fun AssemblyTestContent(
     onSlot: (Int) -> Unit,
     onConfirm: () -> Unit,
     onNext: () -> Unit,
+    onSkip: () -> Unit,
+    onHint: () -> Unit,
     onQuit: () -> Unit,
 ) {
     val whole = state.evaluation == Evaluation.WHOLE_WORD
+    // Předčasné "Potvrdit" / "Dál" nejdřív vyžaduje potvrzení, aby dvojité klepnutí nepřeskočilo slovo.
+    var askContinue by rememberSaveable { mutableStateOf(false) }
+    if (askContinue) {
+        ContinueDialog(
+            onConfirm = {
+                askContinue = false
+                if (whole) onConfirm() else onSkip()
+            },
+            onDismiss = { askContinue = false },
+        )
+    }
     ScreenScaffold(
         title = stringResource(R.string.test_progress, state.pass, state.successPercent),
         actions = {
@@ -88,11 +105,19 @@ fun AssemblyTestContent(
             }
         },
         bottomBar = {
-            // Celé slovo: "Potvrdit" je dostupné kdykoliv, i u nevyplněného slova; po vyhodnocení "Dál".
-            if (whole && !state.done) {
-                BigButton(stringResource(R.string.test_confirm), onConfirm, Modifier.fillMaxWidth())
-            } else {
-                BigButton(stringResource(R.string.test_next), onNext, Modifier.fillMaxWidth(), enabled = state.done)
+            // Po písmenkách lze rozpracované slovo napovědět nebo přeskočit ("Dál"); celé slovo se
+            // potvrzuje. Neúplné slovo se vyhodnotí až po potvrzení dialogem; po vyhodnocení je "Dál".
+            when {
+                whole && !state.done -> BigButton(
+                    stringResource(R.string.test_confirm),
+                    { if (state.complete) onConfirm() else askContinue = true },
+                    Modifier.fillMaxWidth(),
+                )
+                !whole && !state.done -> {
+                    BigOutlinedButton(stringResource(R.string.assembly_hint), onHint, Modifier.fillMaxWidth())
+                    BigButton(stringResource(R.string.test_next), { askContinue = true }, Modifier.fillMaxWidth())
+                }
+                else -> BigButton(stringResource(R.string.test_next), onNext, Modifier.fillMaxWidth())
             }
         },
     ) {
@@ -147,12 +172,31 @@ fun AssemblyTestContent(
 }
 
 @Composable
+private fun ContinueDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.continue_title)) },
+        text = { Text(stringResource(R.string.continue_text)) },
+        confirmButton = {
+            TextButton(onClick = onConfirm) { Text(stringResource(R.string.continue_confirm), style = MaterialTheme.typography.titleMedium) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.continue_cancel), style = MaterialTheme.typography.titleMedium) }
+        },
+    )
+}
+
+@Composable
 private fun Message(state: AssemblyUiState) {
     val feedback = LocalFeedbackColors.current
     val (text, color) = when {
         state.letterError -> stringResource(R.string.assembly_wrong_letter) to MaterialTheme.colorScheme.error
-        state.done && state.hadError ->
+        state.done && state.gaveUp ->
+            stringResource(R.string.assembly_gave_up, state.correctAnswer.orEmpty()) to MaterialTheme.colorScheme.error
+        state.done && state.hadError && state.evaluation == Evaluation.WHOLE_WORD ->
             stringResource(R.string.assembly_wrong_word, state.correctAnswer.orEmpty()) to MaterialTheme.colorScheme.error
+        // Po písmenkách s chybou po cestě: slovo je na konci správně, chyby jsou už započtené.
+        state.done && state.hadError -> stringResource(R.string.assembly_corrected) to feedback.onCorrect
         state.done -> stringResource(R.string.assembly_correct) to feedback.onCorrect
         else -> return
     }
@@ -227,11 +271,11 @@ private fun previewState(done: Boolean = false, hadError: Boolean = false, whole
 @Preview(showBackground = true)
 @Composable
 private fun AssemblyPreview() {
-    WordikTheme { AssemblyTestContent(previewState(), {}, {}, {}, {}, {}) }
+    WordikTheme { AssemblyTestContent(previewState(), {}, {}, {}, {}, {}, {}, {}) }
 }
 
 @Preview(showBackground = true, name = "Celé slovo, chyba")
 @Composable
 private fun AssemblyWholeErrorPreview() {
-    WordikTheme { AssemblyTestContent(previewState(done = true, hadError = true, whole = true), {}, {}, {}, {}, {}) }
+    WordikTheme { AssemblyTestContent(previewState(done = true, hadError = true, whole = true), {}, {}, {}, {}, {}, {}, {}) }
 }

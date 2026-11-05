@@ -345,4 +345,33 @@ class AssemblyTestViewModelTest {
         vm.onQuit()
         assertTrue(sounds.played.none { it == Sound.FINISH })
     }
+
+    // --- napověda a přeskočení ---
+
+    @Test
+    fun `preskoceni zobrazi reseni neprechazi samo a hraje chybu`() = runTest {
+        val sounds = RecordingSoundPlayer()
+        val vm = vmWithSounds(sounds, Evaluation.PER_LETTER)
+        val target = vm.target()
+        vm.onSkip()
+        val st = vm.state.value
+        assertTrue(st.done && st.gaveUp && st.hadError)
+        assertEquals(target, st.correctAnswer)
+        assertEquals(target.length, st.slots.count { it.char != null })
+        assertEquals(listOf(Sound.WRONG), sounds.played)
+        scheduler.advanceTimeBy(5_000)
+        assertEquals(st.prompt, vm.state.value.prompt) // zůstává, "Dál" je povinné
+    }
+
+    @Test
+    fun `napoveda doplni pismeno a slovo pak nepokracuje samo`() = runTest {
+        val vm = vmWithSounds(RecordingSoundPlayer(), Evaluation.PER_LETTER)
+        val target = vm.target()
+        vm.onHint()
+        assertEquals(1, vm.state.value.slots.count { it.char != null })
+        vm.type(target.drop(1))
+        assertTrue(vm.state.value.done)
+        assertTrue(vm.state.value.needsManualNext)
+        assertTrue(!vm.state.value.gaveUp)
+    }
 }
