@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Wordík</string>
+    <string name="back">Zpět</string>
+
+    <!-- Nastavení aplikace -->
+    <string name="settings_title">Nastavení</string>
+    <string name="settings_size_title">Velikost tlačítek a písma</string>
+    <string name="settings_size_hint">Platí pro celou aplikaci.</string>
+    <string name="settings_size_normal">Normální</string>
+    <string name="settings_size_large">Velké</string>
+
+    <!-- Chyba při startu -->
+    <string name="startup_error_title">Aplikaci se nepodařilo spustit</string>
+    <string name="startup_error_hint">Přibalená data jsou chybná:</string>
+
+    <!-- Dočasné obrazovky (nahradí se v dalších krocích) -->
+    <string name="placeholder_open_settings">Nastavení aplikace</string>
 </resources>

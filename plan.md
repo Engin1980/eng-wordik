@@ -118,13 +118,13 @@ Co se dělá: nabídka písmen, hodnocení po písmenkách i celého slova.
 
 Co se dělá: vzhled a kostra obrazovek.
 
-- [ ] 🤖 Téma: veselé, ale střídmé barvy, typografie s fontem z konfigurace (musí jasně rozlišovat „l“, „I“, „1“)
-- [ ] 🤖 Úrovně velikosti „Normální / Velké“ aplikované na tlačítka a písmo v celé aplikaci
-- [ ] 🤖 Navigace: výběr sad → nastavení testu → test → výsledky; návrat a ukončení testu
-- [ ] 🤖 Obrazovka „Nastavení“ (velikost tlačítek a písma), uložení do `SettingsStore`
-- [ ] 🤖 Adaptivní rozvržení pro telefon i tablet, na výšku i na šířku
-- [ ] 🤖 Compose preview pro klíčové komponenty
-- [ ] 🤖 Ověřit sestavení a lint
+- [x] 🤖 Téma: veselé, ale střídmé barvy, typografie s fontem z konfigurace (musí jasně rozlišovat „l“, „I“, „1“)
+- [x] 🤖 Úrovně velikosti „Normální / Velké“ aplikované na tlačítka a písmo v celé aplikaci
+- [x] 🤖 Navigace: výběr sad → nastavení testu → test → výsledky; návrat a ukončení testu
+- [x] 🤖 Obrazovka „Nastavení“ (velikost tlačítek a písma), uložení do `SettingsStore`
+- [x] 🤖 Adaptivní rozvržení pro telefon i tablet, na výšku i na šířku
+- [x] 🤖 Compose preview pro klíčové komponenty
+- [x] 🤖 Ověřit sestavení a lint
 
 ## Krok 9: Výběr sad a nastavení testu
 
