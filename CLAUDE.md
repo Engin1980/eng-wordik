@@ -8,6 +8,10 @@ Gradle projekt (Kotlin DSL, version catalog `gradle/libs.versions.toml`, AGP 9.4
 
 - `applicationId` je dočasně `cz.wordik.app` (změnit před krokem 16), `minSdk 26`, `compileSdk`/`targetSdk` 37, Compose + Material 3, testy JUnit 4 + coroutines-test + Turbine.
 - Balíčky v `app/src/main/java/cz/wordik/app/`: `domain` (čistá logika bez Androidu), `data` (načítání sad, nastavení), `ui` (Compose obrazovky, ViewModely).
+- `domain`: model a parser sad, `TestSession` (průchody/konec/statistiky), `ChoiceTest` (režim 1), `AssemblyTest`/`AssemblyRound` (režim 2), `SettingsValidator`, `ConfigParser`. `data`: `SetRepository`, `ConfigRepository`, `SettingsStore` (DataStore). `ui`: `AppViewModel` + `Screen` (zásobník obrazovek, bez navigation-compose), `setup`, `test`, `results`, `settings`, `theme`, `components`.
+- Konfigurace je v `app/src/main/assets/config.properties`, přibalené sady v `app/src/main/assets/sets/*.txt`. Chybná sada nebo konfigurace se na startu zobrazí jako `StartupErrorScreen`.
+- Compose UI testy (instrumentované) zatím nejsou; UI bylo ověřeno ručně na emulátoru API 37. Kroky 13 až 16 plánu nejsou hotové.
+- Znak BOM ve zdrojácích zapisujte jako `0xFEFF.toChar()`, ne literálem (lint `ByteOrderMark`).
 - `local.properties` (cesta k SDK) je mimo git; na Windows musí mít `sdk.dir=C\:\\Users\\...` (zdvojená zpětná lomítka) (jinak selže lint `PropertyEscape`). `JAVA_HOME` ukazuje na JDK 21.
 
 - Testy `SettingsStore` používají převážně in-memory DataStore: souborový DataStore na Windows JVM selže při druhém zápisu (přejmenování přes existující soubor), na Androidu ne.
