@@ -95,11 +95,11 @@ Co se dělá: stavový automat testu nezávislý na režimu: pořadí slovíček
 
 Co se dělá: generování otázek a vyhodnocení.
 
-- [ ] 🤖 Volba strany podle směru (CZ→cizí, cizí→CZ, mix náhodně)
-- [ ] 🤖 Generování N nesprávných variant náhodně ze všech slovíček vybraných sad, bez shodného textu se správnou odpovědí a bez duplicit
-- [ ] 🤖 Zamíchání N+1 možností
-- [ ] 🤖 Vyhodnocení odpovědi a propojení s `TestSession`
-- [ ] 🤖 Unit testy: počet možností N+1, správná odpověď je vždy mezi možnostmi, žádné duplicity, směr respektuje nastavení, mix dává obě strany, málo slovíček (chyba při startu), více sad
+- [x] 🤖 Volba strany podle směru (CZ→cizí, cizí→CZ, mix náhodně)
+- [x] 🤖 Generování N nesprávných variant náhodně ze všech slovíček vybraných sad, bez shodného textu se správnou odpovědí a bez duplicit
+- [x] 🤖 Zamíchání N+1 možností
+- [x] 🤖 Vyhodnocení odpovědi a propojení s `TestSession`
+- [x] 🤖 Unit testy: počet možností N+1, správná odpověď je vždy mezi možnostmi, žádné duplicity, směr respektuje nastavení, mix dává obě strany, málo slovíček (chyba při startu), více sad
 
 ## Krok 7: Logika režimu 2 (skládání z písmen)
 
