@@ -10,6 +10,40 @@
     <string name="settings_size_normal">Normální</string>
     <string name="settings_size_large">Velké</string>
 
+    <!-- Výběr sad -->
+    <string name="select_title">Wordík</string>
+    <string name="select_hint">Vyberte sadu slovíček (nebo víc sad najednou):</string>
+    <string name="select_summary">Vybráno sad: %1$d, slovíček celkem: %2$d</string>
+    <string name="select_continue">Pokračovat</string>
+    <plurals name="word_count">
+        <item quantity="one">%d slovíčko</item>
+        <item quantity="few">%d slovíčka</item>
+        <item quantity="many">%d slovíčka</item>
+        <item quantity="other">%d slovíček</item>
+    </plurals>
+
+    <!-- Nastavení testu -->
+    <string name="setup_title">Nastavení testu</string>
+    <string name="setup_sets">Sady: %1$s</string>
+    <string name="setup_start">Začít test</string>
+    <string name="setup_mode">Režim testu</string>
+    <string name="mode_choice">Výběr z variant</string>
+    <string name="mode_assembly">Skládání slova z písmen</string>
+    <string name="setup_wrong_options">Počet nesprávných variant</string>
+    <string name="setup_direction">Směr</string>
+    <string name="direction_cz_foreign">Česky → cizí jazyk</string>
+    <string name="direction_foreign_cz">Cizí jazyk → česky</string>
+    <string name="direction_mix">Obojí (náhodně)</string>
+    <string name="setup_extra_letters">Písmena navíc</string>
+    <string name="setup_evaluation">Hodnocení</string>
+    <string name="evaluation_letters">Po písmenkách</string>
+    <string name="evaluation_word">Celé slovo (po potvrzení)</string>
+    <string name="setup_min_passes">Minimální počet průchodů</string>
+    <string name="setup_min_success">Minimální úspěšnost</string>
+    <string name="error_no_words">Vybrané sady neobsahují žádná slovíčka.</string>
+    <string name="error_not_enough_words">Pro výběr z variant je potřeba alespoň %1$d slovíček (počet nesprávných variant + 1), vybrané sady mají jen %2$d. Snižte počet nesprávných variant nebo vyberte víc sad.</string>
+    <string name="error_out_of_range">Hodnota „%1$s“ musí být od %2$d do %3$d.</string>
+
     <!-- Chyba při startu -->
     <string name="startup_error_title">Aplikaci se nepodařilo spustit</string>
     <string name="startup_error_hint">Přibalená data jsou chybná:</string>

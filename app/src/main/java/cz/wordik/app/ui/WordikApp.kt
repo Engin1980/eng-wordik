@@ -18,6 +18,10 @@ import cz.wordik.app.R
 import cz.wordik.app.ui.components.BigButton
 import cz.wordik.app.ui.components.ScreenScaffold
 import cz.wordik.app.ui.settings.AppSettingsScreen
+import cz.wordik.app.ui.setup.SetSelectionScreen
+import cz.wordik.app.ui.setup.SetSelectionViewModel
+import cz.wordik.app.ui.setup.TestSetupScreen
+import cz.wordik.app.ui.setup.TestSetupViewModel
 import cz.wordik.app.ui.theme.WordikTheme
 
 /** Kořen aplikace: téma podle volby velikosti a zásobník obrazovek. */
@@ -38,6 +42,32 @@ fun WordikApp(container: AppContainer) {
                 onSizeLevelChange = appViewModel::setSizeLevel,
                 onBack = { appViewModel.back() },
             )
+            Screen.SetSelection -> {
+                val selectionViewModel: SetSelectionViewModel = viewModel(
+                    factory = viewModelFactory { initializer { SetSelectionViewModel(container.sets) } },
+                )
+                SetSelectionScreen(
+                    viewModel = selectionViewModel,
+                    onContinue = { appViewModel.open(Screen.TestSetup(it)) },
+                    onOpenSettings = { appViewModel.open(Screen.AppSettings) },
+                )
+            }
+            is Screen.TestSetup -> {
+                val setupViewModel: TestSetupViewModel = viewModel(
+                    key = "setup:" + screen.setNames.joinToString("|"),
+                    factory = viewModelFactory {
+                        initializer {
+                            TestSetupViewModel(screen.setNames, container.sets, container.config, container.settingsStore)
+                        }
+                    },
+                )
+                TestSetupScreen(
+                    viewModel = setupViewModel,
+                    setNames = screen.setNames,
+                    onStart = { appViewModel.startTest(screen.setNames, it) },
+                    onBack = { appViewModel.back() },
+                )
+            }
             else -> PlaceholderScreen(screen) { appViewModel.open(Screen.AppSettings) }
         }
     }

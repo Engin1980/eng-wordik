@@ -130,11 +130,11 @@ Co se dělá: vzhled a kostra obrazovek.
 
 Co se dělá: obrazovky před začátkem testu.
 
-- [ ] 🤖 Seznam sad s možností vybrat jednu nebo více najednou, počet slovíček u každé sady
-- [ ] 🤖 Obrazovka nastavení testu: pole podle režimu (volby, které k režimu nepatří, se skryjí), hodnoty z uložené kombinace nebo výchozí
-- [ ] 🤖 Validace v UI s českými hláškami, včetně chyby „málo slovíček pro N+1 možností“ a nespuštění testu
-- [ ] 🤖 Uložení nastavení při spuštění testu
-- [ ] 🤖 ViewModel testy: výběr více sad, načtení uloženého nastavení, chyba N+1, výchozí hodnoty pro novou kombinaci
+- [x] 🤖 Seznam sad s možností vybrat jednu nebo více najednou, počet slovíček u každé sady
+- [x] 🤖 Obrazovka nastavení testu: pole podle režimu (volby, které k režimu nepatří, se skryjí), hodnoty z uložené kombinace nebo výchozí
+- [x] 🤖 Validace v UI s českými hláškami, včetně chyby „málo slovíček pro N+1 možností“ a nespuštění testu
+- [x] 🤖 Uložení nastavení při spuštění testu
+- [x] 🤖 ViewModel testy: výběr více sad, načtení uloženého nastavení, chyba N+1, výchozí hodnoty pro novou kombinaci
 - [ ] 🤖 Compose UI testy obrazovek (běží na emulátoru nebo zařízení, viz krok 14)
 
 ## Krok 10: Obrazovka režimu 1
