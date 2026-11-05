@@ -193,6 +193,28 @@ Co se dělá: důkladné ověření celé aplikace.
 - [ ] 🤖 Opravit nalezené chyby podle zpětné vazby
 - [ ] 🤖 Projít `task.md` bod po bodu a ověřit, že je vše splněno
 
+## Krok 14X: Správa sad
+
+Co se dělá: uživatel si sady spravuje sám: vytvoří, importuje přes QR kód, upraví a smaže. Sady přestanou být jen přibalené v aplikaci a ukládají se do úložiště aplikace. Mění se tím pravidla z `task.md` („Zdroj sad“, „Sady se v aplikaci neupravují“), proto se `task.md` na konci kroku aktualizuje.
+
+Rozhodnutí: přibalené sady se při prvním spuštění zkopírují mezi uživatelské (po smazání se znovu nekopírují), název sady musí být unikátní, text se při chybě neuloží, QR import může mít víc kódů za sebou.
+
+- [ ] 🤖 Úložiště uživatelských sad ve vnitřním úložišti aplikace (jeden soubor `název.txt` v UTF-8 na sadu, stejný formát `česky;cizí` jako dosud); `SetRepository` čte odtud místo z `assets`, rozhraní zdroje zůstává kvůli testům
+- [ ] 🤖 První spuštění: přibalené sady z `assets/sets/` se jednorázově zkopírují do úložiště; příznak „zkopírováno“ v DataStore, aby se smazané sady znovu neobjevily
+- [ ] 🤖 Pravidla názvu sady: neprázdný, unikátní (bez ohledu na velikost písmen), bez znaků nepovolených v názvu souboru (`\ / : * ? " < > |`), srozumitelné české hlášky; přejmenování sady není součástí kroku
+- [ ] 🤖 Vytvoření sady: dotaz na název, vznikne prázdná sada a otevře se editace (prázdná sada se uložit smí)
+- [ ] 🤖 Editace sady: jednoduchý textový editor, slovíčka jako volný text `česky;cizí` po řádcích; tlačítka „Uložit“ a „Zahodit změny“ (zahození při neuložených změnách s potvrzením)
+- [ ] 🤖 Validace při uložení stávajícím parserem: při chybě se neukládá a zobrazí se chyby s čísly řádků, uživatel opraví nebo zahodí změny
+- [ ] 🤖 Smazání sady s potvrzením; po smazání se sada odstraní i z výběru sad, pokud byla vybraná
+- [ ] 🤖 Obrazovka výběru sad: tlačítka „Nová sada“ a „Importovat“, u každé sady „Upravit“ a „Smazat“; po změnách se seznam obnoví, uložené nastavení pro kombinace smazaných sad nevadí
+- [ ] 🤖 Import přes QR: dotaz na název, pak skener (CameraX + ML Kit Barcode Scanning, běží offline s přibaleným modelem) a žádost o povolení kamery s českým vysvětlením; odmítnutí povolení ukáže srozumitelnou hlášku a návrat
+- [ ] 🤖 Obsah QR kódu: UTF-8 text `česky;cizí` po řádcích; naskenovat jde víc kódů za sebou (bez pořadí), slova se sloučí do jedné sady, duplicity (shodné české i cizí znění) se vynechají; ukazatel počtu naskenovaných kódů/slovíček a tlačítko „Hotovo“
+- [ ] 🤖 Po „Hotovo“ se pokračuje editací naskenovaného textu (uložit / zahodit); chybné řádky z QR se ukážou stejně jako při ruční editaci
+- [ ] 🤖 Unit testy: pravidla názvu (duplicita, zakázané znaky, prázdný), vytvoření / uložení / smazání v úložišti, jednorázové kopírování přibalených sad, sloučení kódů a odstranění duplicit, validace při uložení s čísly řádků, ViewModely (nová sada, editace, zahození, smazání s potvrzením)
+- [ ] 🤖 Compose UI testy: vytvoření sady, editace s chybným a správným textem, smazání s potvrzením; skener se v testech nahradí rozhraním, aby nebyla potřeba kamera
+- [ ] 👤 Ruční zkouška importu přes QR na skutečném zařízení s kamerou (QR kódy z obrazovky počítače, i více kódů za sebou)
+- [ ] 🤖 Aktualizovat `task.md` (sady, správa sad, QR import) a `CLAUDE.md` (struktura, závislosti, oprávnění kamery)
+
 ## Krok 15: Sestavení instalovatelného APK
 
 Co se dělá: ikona, podpis a APK k instalaci.
