@@ -204,4 +204,77 @@ class FlowTest {
         click("‹ Zpět")
         rule.onNodeWithText("Pokračovat").assertExists()
     }
+
+    private fun typeTarget(prompt: String) {
+        val word = words.first { it.czech == prompt }
+        word.foreign.forEach { c ->
+            val label = if (c == ' ') "mezera" else c.toString()
+            rule.onAllNodes(hasTestTag("tile") and hasText(label) and isEnabled()).onFirst().performClick()
+            rule.waitForIdle()
+        }
+    }
+
+    @Test
+    fun predcasneDalPoPismenkachVyzadujePotvrzeniAZobrazíReseni() {
+        startTest(listOf("Škola a domov"), "Skládání slova z písmen", "Po písmenkách")
+        val prompt = promptText()
+        val answer = words.first { it.czech == prompt }.foreign
+        click("Dál")
+        rule.onNodeWithText("Opravdu pokračovat?").assertExists()
+        click("Zpět")
+        assertTrue(!exists("Opravdu pokračovat?"))
+        assertTrue(promptText() == prompt)
+        click("Dál")
+        click("Ano, pokračovat")
+        rule.onNodeWithText("Správné řešení: $answer").assertExists()
+        click("Dál")
+        assertTrue(promptText() != prompt || resultsShown())
+    }
+
+    @Test
+    fun napovedaDoplniPismenoAPoOpravenemSlovuSeZobraziNyniSpravne() {
+        startTest(listOf("Škola a domov"), "Skládání slova z písmen", "Po písmenkách")
+        val prompt = promptText()
+        click("Napověz")
+        // Zbytek slova se doplní ručně; první písmeno už je vyplněné, klávesa je zašedlá.
+        val word = words.first { it.czech == prompt }
+        word.foreign.drop(1).forEach { c ->
+            val label = if (c == ' ') "mezera" else c.toString()
+            rule.onAllNodes(hasTestTag("tile") and hasText(label) and isEnabled()).onFirst().performClick()
+            rule.waitForIdle()
+        }
+        rule.onNodeWithText("Nyní je řešení správné.").assertExists()
+    }
+
+    @Test
+    fun potvrditNeuplneSlovoVyzadujePotvrzeni() {
+        startTest(listOf("Škola a domov"), "Skládání slova z písmen", "Celé slovo (po potvrzení)")
+        val prompt = promptText()
+        click("Potvrdit")
+        rule.onNodeWithText("Opravdu pokračovat?").assertExists()
+        click("Zpět")
+        assertTrue(promptText() == prompt)
+        typeTarget(prompt)
+        click("Potvrdit") // úplné slovo se potvrdí hned, bez dialogu
+        assertTrue(!exists("Opravdu pokračovat?"))
+        rule.onNodeWithText("Správně!").assertExists()
+    }
+
+    @Test
+    fun prubehPruchoduSeZobrazujeAZvysuje() {
+        startTest(listOf("Zvířata"), "Výběr z variant")
+        rule.onNodeWithText("Hotovo 0 z 12 slovíček v tomto průchodu").assertExists()
+        val prompt = promptText()
+        val answer = words.firstNotNullOf { w ->
+            when (prompt) {
+                w.czech -> w.foreign
+                w.foreign -> w.czech
+                else -> null
+            }
+        }
+        rule.onAllNodes(hasTestTag("option") and hasText(answer)).onFirst().performClick()
+        rule.waitForIdle()
+        click("Dál")
+        rule.onNodeWithText("Hotovo 1 z 12 slovíček v tomto průchodu").assertExists()
+    }
 }
