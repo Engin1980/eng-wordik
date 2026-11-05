@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -24,6 +25,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -32,9 +34,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import cz.wordik.app.R
 import cz.wordik.app.domain.SizeLevel
 import cz.wordik.app.ui.theme.LocalSizes
 import cz.wordik.app.ui.theme.WordikTheme
@@ -223,5 +229,22 @@ private fun BigButtonLargePreview() {
         Surface {
             Column(Modifier.padding(16.dp)) { BigButton("Pokračovat", {}, Modifier.fillMaxWidth()) }
         }
+    }
+}
+
+/** Průběh průchodu testu: ukazatel a text "Hotovo X z Y slovíček". */
+@Composable
+fun PassProgress(done: Int, total: Int, modifier: Modifier = Modifier) {
+    Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        LinearProgressIndicator(
+            progress = { if (total == 0) 0f else done.toFloat() / total },
+            modifier = Modifier.fillMaxWidth().height(10.dp).testTag("pass_progress"),
+            strokeCap = StrokeCap.Round,
+        )
+        Text(
+            stringResource(R.string.test_pass_progress, done, total),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }

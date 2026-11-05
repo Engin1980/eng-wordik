@@ -43,6 +43,9 @@ data class AssemblyUiState(
     /** Správné znění, zobrazí se po vyhodnocení slova s chybou. */
     val correctAnswer: String? = null,
     val pass: Int = 1,
+    /** Hotová slovíčka rozpracovaného průchodu a jejich celkový počet. */
+    val passDone: Int = 0,
+    val passTotal: Int = 1,
     val successPercent: Int = 0,
     val result: TestResult? = null,
     val error: Boolean = false,
@@ -150,6 +153,8 @@ class AssemblyTestViewModel(
             letterError = letterError,
             correctAnswer = round?.takeIf { it.needsManualNext }?.target,
             pass = test.session.completedPasses + 1,
+            passDone = test.session.wordsDoneInPass,
+            passTotal = test.session.wordCount,
             successPercent = (test.session.successRate * 100).roundToInt(),
             result = if (test.isFinished) test.result() else null,
         )

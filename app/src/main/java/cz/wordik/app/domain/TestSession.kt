@@ -74,6 +74,12 @@ class TestSession(
     val successRate: Double
         get() = (totalCorrect + totalWrong).let { if (it == 0) 0.0 else totalCorrect.toDouble() / it }
 
+    /** Počet slovíček v jednom průchodu. */
+    val wordCount: Int get() = words.size
+
+    /** Slovíček už hotových v rozpracovaném průchodu. */
+    val wordsDoneInPass: Int get() = words.size - queue.size
+
     /** Slovíček zbývajících v rozpracovaném průchodu včetně aktuálního. */
     val wordsLeftInPass: Int get() = queue.size
 

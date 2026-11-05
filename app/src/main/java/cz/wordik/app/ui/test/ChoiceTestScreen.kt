@@ -36,6 +36,7 @@ import cz.wordik.app.R
 import cz.wordik.app.domain.TestResult
 import cz.wordik.app.ui.components.BigButton
 import cz.wordik.app.ui.components.BigOutlinedButton
+import cz.wordik.app.ui.components.PassProgress
 import cz.wordik.app.ui.components.ScreenScaffold
 import cz.wordik.app.ui.theme.LocalFeedbackColors
 import cz.wordik.app.ui.theme.WordikTheme
@@ -126,6 +127,8 @@ fun ChoiceTestContent(
             )
         },
     ) {
+        PassProgress(state.passDone, state.passTotal)
+
         Surface(
             color = MaterialTheme.colorScheme.primaryContainer,
             shape = RoundedCornerShape(20.dp),

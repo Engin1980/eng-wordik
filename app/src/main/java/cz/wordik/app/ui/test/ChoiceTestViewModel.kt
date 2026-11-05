@@ -31,6 +31,9 @@ data class ChoiceUiState(
     val isCorrect: Boolean? = null,
     /** Číslo právě probíhajícího průchodu (od 1). */
     val pass: Int = 1,
+    /** Hotová slovíčka rozpracovaného průchodu a jejich celkový počet. */
+    val passDone: Int = 0,
+    val passTotal: Int = 1,
     val successPercent: Int = 0,
     /** Test skončil (splněny podmínky, nebo ukončil uživatel); UI přejde na výsledky. */
     val result: TestResult? = null,
@@ -108,6 +111,8 @@ class ChoiceTestViewModel(
             correctIndex = if (answered != null) question?.correctIndex else null,
             isCorrect = t.lastAnswerCorrect,
             pass = t.session.completedPasses + 1,
+            passDone = t.session.wordsDoneInPass,
+            passTotal = t.session.wordCount,
             successPercent = (t.session.successRate * 100).roundToInt(),
             result = if (t.isFinished) t.result() else null,
         )
