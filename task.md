@@ -37,6 +37,7 @@ Tento dokument popisuje **co má aplikace dělat**, ne jak se bude vyvíjet. Pl�
   - počet správných odpovědí / počet všech odpovědí (režim 1 a režim 2 s hodnocením celého slova),
   - počet správných písmen / (správná + chybná písmena) (režim 2 s hodnocením po písmenkách).
 - Pokud požadované procento není dosaženo, test pokračuje dalšími průchody, dokud se nedosáhne nebo ho uživatel neukončí.
+- **Průběh průchodu:** během testu (v obou režimech) je vidět, kolik slovíček aktuálního průchodu je hotovo („Hotovo X z Y slovíček v tomto průchodu“) včetně ukazatele.
 - Uživatel může test kdykoliv ukončit. Přerušený test nelze později obnovit. Po předčasném ukončení se zobrazí výsledky dosavadního průběhu s označením „Test nebyl dokončen“.
 - Při spuštění testu se vždy vybírá sada nebo sady a nastavení testu. Aplikace si pamatuje naposledy použité nastavení pro přesnou kombinaci vybraných sad (jedna sada je také kombinace). Pro dosud nepoužitou kombinaci se nabídnou výchozí hodnoty z konfiguračního souboru.
 
@@ -92,7 +93,11 @@ Soubor je součástí zdrojů aplikace (změna znamená nové sestavení). Obsah
   - Každé vložené písmeno se hodnotí hned a hodnotí se vždy jen další očekávané písmeno.
   - Správné písmeno se vloží. Špatné se nevloží, ohlásí se chyba a započítá se chyba.
   - Uživatel pokračuje, dokud slovo není správně doplněné. Na jednom slově tak může nabrat více chyb, ale správných písmen jen tolik, kolik jich slovo má. Každé písmeno se do statistiky počítá samostatně.
-- **Pokračování po dokončení slova:** po slově bez chyby se přejde na další automaticky po intervalu z konfigurace, dřív tlačítkem „Dál“. Pokud při slově nastala chyba (špatné slovo při hodnocení celého slova, nebo alespoň jedno špatné písmeno při hodnocení po písmenkách), je tlačítko „Dál“ povinné a automatický přechod se nepoužije.
+  - Pokud slovo po chybě na konci správně doplní, zobrazí se „Nyní je řešení správné.“ (ne „Špatně“); chyby se do statistiky počítají dál.
+  - **Přeskočení slova („Dál“):** uživatel, který slovo vůbec nezná, může kdykoliv stisknout „Dál“. Po potvrzení dialogem „Opravdu pokračovat?“ se za každé dosud nedoplněné písmeno započítá chyba (už doplněná písmena zůstanou správná) a zobrazí se správné řešení („Správné řešení: …“). Pak je „Dál“ povinné.
+  - **Nápověda („Napověz“):** doplní další písmeno a započítá jednu chybu; samotné doplněné písmeno se jako správné nepočítá. Doplní-li nápověda poslední písmeno, slovo je hotové (s chybou).
+- **Pokračování po dokončení slova:** po slově bez chyby se přejde na další automaticky po intervalu z konfigurace, dřív tlačítkem „Dál“. Pokud při slově nastala chyba (špatné slovo při hodnocení celého slova, nebo alespoň jedno špatné písmeno či použitá nápověda/přeskočení při hodnocení po písmenkách), je tlačítko „Dál“ povinné a automatický přechod se nepoužije.
+- **Ochrana proti nechtěnému dvojklepnutí:** „Potvrdit“ u neúplně vyplněného slova (celé slovo) a předčasné „Dál“ (po písmenkách) vyžadují potvrzení dialogem „Opravdu pokračovat?“. Úplně vyplněné slovo se potvrdí bez dialogu.
 - Dlouhá slova a fráze se zatím předpokládají bez speciálního omezení.
 
 ### Výsledky testu

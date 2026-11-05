@@ -10,7 +10,8 @@ Gradle projekt (Kotlin DSL, version catalog `gradle/libs.versions.toml`, AGP 9.4
 - Balíčky v `app/src/main/java/cz/wordik/app/`: `domain` (čistá logika bez Androidu), `data` (načítání sad, nastavení), `ui` (Compose obrazovky, ViewModely).
 - `domain`: model a parser sad, `TestSession` (průchody/konec/statistiky), `ChoiceTest` (režim 1), `AssemblyTest`/`AssemblyRound` (režim 2), `SettingsValidator`, `ConfigParser`. `data`: `SetRepository`, `ConfigRepository`, `SettingsStore` (DataStore). `ui`: `AppViewModel` + `Screen` (zásobník obrazovek, bez navigation-compose), `setup`, `test`, `results`, `settings`, `theme`, `components`.
 - Konfigurace je v `app/src/main/assets/config.properties`, přibalené sady v `app/src/main/assets/sets/*.txt`. Chybná sada nebo konfigurace se na startu zobrazí jako `StartupErrorScreen`.
-- Compose UI testy (instrumentované) zatím nejsou; UI bylo ověřeno ručně na emulátoru API 37. Kroky 13 až 16 plánu nejsou hotové.
+- Instrumentované Compose UI testy celého toku jsou v `app/src/androidTest/.../FlowTest.kt` (testTagy `prompt`, `option`, `tile`, `slot`, `pass_progress`; vyžadují Espresso 3.7.0 kvůli API 37 a rozsvícený displej emulátoru, např. `adb shell svc power stayon true`). Zvuky: balíček `sound` (`SoundPlayer`, `SoundPool`; WAV generuje `tools/generate_sounds.py`). Kroky 15 a 16 plánu nejsou hotové; chyby z `bugs.md` (B1–B4) jsou opravené.
+- Režim 2 po písmenkách: `AssemblyRound.hint()` (napověda, +1 chyba) a `giveUp()` (přeskočení, chyby za zbývající písmena); neúplné „Potvrdit“/„Dál“ jde přes potvrzovací dialog v `AssemblyTestScreen`.
 - Znak BOM ve zdrojácích zapisujte jako `0xFEFF.toChar()`, ne literálem (lint `ByteOrderMark`).
 - `local.properties` (cesta k SDK) je mimo git; na Windows musí mít `sdk.dir=C\:\\Users\\...` (zdvojená zpětná lomítka) (jinak selže lint `PropertyEscape`). `JAVA_HOME` ukazuje na JDK 21.
 
@@ -25,7 +26,7 @@ Na Windows `gradlew.bat` (v Git Bash `./gradlew.bat`).
 - Jeden test: `./gradlew.bat testDebugUnitTest --tests "cz.wordik.app.SanityTest"`
 - Lint: `./gradlew.bat lint`
 - Vše najednou: `./gradlew.bat assembleDebug test lint`
-- Instrumentované testy (potřebují běžící emulátor/zařízení): `./gradlew.bat connectedDebugAndroidTest`
+- Instrumentované testy (potřebují běžící emulátor/zařízení, při více zařízeních jen jedno): `./gradlew.bat connectedDebugAndroidTest`
 - Emulátory (AVD): `Medium_Tablet_API_26`, `Pixel_Tablet_API_35`, `Medium_Phone_API_37.0`; `adb` je v `%ANDROID_HOME%\platform-tools`.
 
 ## What is being built (from `task.md`)
