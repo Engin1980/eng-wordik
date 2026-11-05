@@ -105,14 +105,14 @@ Co se dělá: generování otázek a vyhodnocení.
 
 Co se dělá: nabídka písmen, hodnocení po písmenkách i celého slova.
 
-- [ ] 🤖 Rozklad cizího slovíčka na znaky, nabídka včetně opakovaných znaků, mezery, apostrofu a pomlčky, náhodné pořadí
-- [ ] 🤖 Písmena navíc: jen písmena, která se vyskytují v cizích slovíčkách vybraných sad, počet dle nastavení
-- [ ] 🤖 Porovnání znaků: bez rozlišení velikosti písmen, s rozlišením u slovíčka v uvozovkách, diakritika je jiné písmeno
-- [ ] 🤖 Hodnocení po písmenkách: kontrola jen dalšího očekávaného znaku, správný se vloží, špatný se započítá jako chyba a nevloží se; počítání správných a chybných písmen
-- [ ] 🤖 Hodnocení celého slova: potvrzení kdykoliv (i nevyplněného slova), špatné slovo = chyba za průchod, bez opravy
-- [ ] 🤖 Vrácení vloženého písmena do nabídky před potvrzením (jen v hodnocení celého slova)
-- [ ] 🤖 Informace pro UI, zda je potřeba povinné „Dál“ (slovo s chybou) nebo se přechází automaticky
-- [ ] 🤖 Unit testy: slovo „book“ (dvě písmena „o“), mezera ve frázi, „c“ ≠ „č“, velikost písmen s uvozovkami i bez nich, písmena navíc nikdy nejsou mimo povolenou množinu, chyba nezvýší počet správných písmen nad délku slova, nevyplněné potvrzení, vrácení písmena
+- [x] 🤖 Rozklad cizího slovíčka na znaky, nabídka včetně opakovaných znaků, mezery, apostrofu a pomlčky, náhodné pořadí
+- [x] 🤖 Písmena navíc: jen písmena, která se vyskytují v cizích slovíčkách vybraných sad, počet dle nastavení
+- [x] 🤖 Porovnání znaků: bez rozlišení velikosti písmen, s rozlišením u slovíčka v uvozovkách, diakritika je jiné písmeno
+- [x] 🤖 Hodnocení po písmenkách: kontrola jen dalšího očekávaného znaku, správný se vloží, špatný se započítá jako chyba a nevloží se; počítání správných a chybných písmen
+- [x] 🤖 Hodnocení celého slova: potvrzení kdykoliv (i nevyplněného slova), špatné slovo = chyba za průchod, bez opravy
+- [x] 🤖 Vrácení vloženého písmena do nabídky před potvrzením (jen v hodnocení celého slova)
+- [x] 🤖 Informace pro UI, zda je potřeba povinné „Dál“ (slovo s chybou) nebo se přechází automaticky
+- [x] 🤖 Unit testy: slovo „book“ (dvě písmena „o“), mezera ve frázi, „c“ ≠ „č“, velikost písmen s uvozovkami i bez nich, písmena navíc nikdy nejsou mimo povolenou množinu, chyba nezvýší počet správných písmen nad délku slova, nevyplněné potvrzení, vrácení písmena
 
 ## Krok 8: Základ UI (téma, navigace, nastavení aplikace)
 
