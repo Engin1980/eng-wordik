@@ -217,15 +217,18 @@ Rozhodnutí: přibalené sady se při prvním spuštění zkopírují mezi uživ
 
 ## Krok 15: Sestavení instalovatelného APK
 
-Co se dělá: ikona, podpis a APK k instalaci.
+Co se dělá: ikona, podpis a APK k ruční instalaci. Rozhodnutí: verze `0.1.0` (`versionCode` 1), `applicationId` zůstává dočasný, APK se nikam neinstaluje (ani do emulátoru), jen se vytvoří soubor k dispozici. Dočasný keystore vytvořím já mimo repozitář; pro budoucí publikaci si uživatel vytvoří vlastní klíč (viz krok 16). Ztráta dočasného klíče před publikací nevadí (nové APK jde nainstalovat po odinstalaci staré verze, data aplikace se tím smažou).
 
-- [ ] 🤖 Ikona aplikace (adaptivní) a název „Wordík“
-- [ ] 🤖 Nastavení verze (`versionName`, `versionCode`)
-- [ ] 🤖 Release build s minifikací (R8) a ověření, že funguje stejně jako debug
-- [ ] 🤖 Podpis APK vlastním keystorem (keystore mimo repozitář, heslo mimo kód)
-- [ ] 🤖 Vytvořit podepsané APK a ověřit instalaci na API 26 i novějším
-- [ ] 👤 Instalace APK na vaše zařízení a schválení
-- [ ] 🤖 Aktualizovat `CLAUDE.md` (příkazy pro release build, struktura projektu)
+- [x] 🤖 Ikona aplikace (adaptivní, vektorová, s monochromatickou variantou) a název „Wordík“
+- [x] 🤖 Nastavení verze (`versionName` 0.1.0, `versionCode` 1)
+- [x] 🤖 Release build s minifikací (R8) a pravidla pro ML Kit / CameraX, aby build prošel; funkčnost minifikované aplikace nelze bez instalace ověřit, ověří uživatel při ruční zkoušce
+  - `assembleRelease` s R8 a zmenšením zdrojů prošel, další pravidla nebylo třeba doplňovat (`proguard-rules.pro` je prázdný).
+- [x] 🤖 Podpis APK dočasným keystorem (keystore a heslo mimo repozitář, cesta přes `keystore.properties`)
+  - Keystore a `keystore.properties` jsou v `C:\Users\vajgma91\.wordik-keystore\` (nebo cesta z proměnné `WORDIK_KEYSTORE_PROPERTIES`).
+- [x] 🤖 Vytvořit podepsané APK a ověřit ho bez instalace (`apksigner verify`, `aapt dump badging`: název, verze, `minSdk`, oprávnění)
+  - Ověřeno: podpis platný (schéma v2, stačí pro `minSdk` 26), `cz.wordik.app` 0.1.0 (1), `minSdk` 26, název Wordík. Soubor je v `dist/Wordik-0.1.0.apk` (23 MB, mimo git).
+- [ ] 👤 Ruční instalace APK na vaše zařízení a schválení (včetně zkoušky, že minifikovaná verze funguje, zejména skener QR)
+- [x] 🤖 Aktualizovat `CLAUDE.md` (příkazy pro release build, struktura projektu)
 
 ## Krok 16: Publikace na Google Play (poslední) – ZABLOKOVÁNO
 
@@ -234,6 +237,7 @@ Co se dělá: příprava a nahrání do obchodu. Velká část vyžaduje váš �
 **Blokováno, dokud uživatel nerozhodne:** konečný package name (`applicationId`; po publikaci ho nelze změnit), vývojářský účet Google Play a místo pro zásady ochrany soukromí. Do té doby se tento krok nezačíná.
 
 - [ ] 👤 Rozhodnout o konečném `applicationId` a změnit ho v projektu
+- [ ] 👤 Vytvořit vlastní klíč (upload key) pro podepisování aplikace pro Google Play, uschovat ho mimo repozitář a zálohovat ho spolu s heslem (dočasný keystore z kroku 15 se pro publikaci nepoužije)
 - [ ] 👤 Vývojářský účet Google Play (jednorázový poplatek, ověření totožnosti)
 - [ ] 🤖 Přechod na Android App Bundle (AAB) a podepisování Google Play App Signing
 - [ ] 🤖 Zásady ochrany soukromí (aplikace nesbírá žádná data), podklady pro formulář „Data safety“

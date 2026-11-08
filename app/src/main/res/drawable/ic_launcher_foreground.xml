@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Písmeno W; vše uvnitř bezpečné zóny 66 x 66 uprostřed. -->
+    <path
+        android:pathData="M31,42L41,72L54,52L67,72L77,42"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:fillColor="#F08A00"
+        android:pathData="M54,32m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0" />
+</vector>

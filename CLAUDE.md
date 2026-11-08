@@ -28,6 +28,7 @@ Na Windows `gradlew.bat` (v Git Bash `./gradlew.bat`).
 - Lint: `./gradlew.bat lint`
 - Vše najednou: `./gradlew.bat assembleDebug test lint`
 - Instrumentované testy (potřebují běžící emulátor/zařízení, při více zařízeních jen jedno): `./gradlew.bat connectedDebugAndroidTest`
+- Release APK (R8, podepsané): `./gradlew.bat assembleRelease` → `app/build/outputs/apk/release/app-release.apk`; hotový soubor pro ruční instalaci je v `dist/` (mimo git). Podpis čte `~/.wordik-keystore/keystore.properties` (nebo cesta v proměnné `WORDIK_KEYSTORE_PROPERTIES`); bez souboru vznikne nepodepsané APK. Keystore je dočasný, pro Google Play bude vlastní klíč (krok 16). Kontrola bez instalace: `apksigner verify --print-certs` a `aapt2 dump badging` (build-tools).
 - Emulátory (AVD): `Medium_Tablet_API_26`, `Pixel_Tablet_API_35`, `Medium_Phone_API_37.0`; `adb` je v `%ANDROID_HOME%\platform-tools`.
 
 ## What is being built (from `task.md`)
