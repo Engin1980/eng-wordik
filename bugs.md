@@ -8,6 +8,8 @@ Pokud má při spuštěném testu více sad společné slovo (ať už české ne
 
 ## Critical: Otevření kamery pro snímání QR kódu způsobí pád aplikace
 
+**OPRAVENO** (release build, ověřeno na tabletu OSCAL Pad 16, Android 13). Příčina: R8 v release buildu poškodil inicializaci komponent ML Kitu, takže `BarcodeScanning.getClient()` spadl na NPE (debug build fungoval). Oprava: pravidla `-keep` pro ML Kit a `com.google.firebase.components` v `app/proguard-rules.pro`. Skenování QR kódu v opraveném release APK funguje.
+
 Aplikace spadne po potvrzení/povolení použití kamery, tedy v okamžiku, kdy by se mělo zobrazit okno kamery, která by ukázala náhled snímaného qr kódu. Jiné agent dodal:
 
 ```

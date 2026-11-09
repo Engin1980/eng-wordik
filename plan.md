@@ -212,7 +212,8 @@ Rozhodnutí: přibalené sady se při prvním spuštění zkopírují mezi uživ
 - [x] 🤖 Po „Hotovo“ se pokračuje editací naskenovaného textu (uložit / zahodit); chybné řádky z QR se ukážou stejně jako při ruční editaci
 - [x] 🤖 Unit testy: pravidla názvu (duplicita, zakázané znaky, prázdný), vytvoření / uložení / smazání v úložišti, jednorázové kopírování přibalených sad, sloučení kódů a odstranění duplicit, validace při uložení s čísly řádků, ViewModely (nová sada, editace, zahození, smazání s potvrzením)
 - [x] 🤖 Compose UI testy: vytvoření sady, editace s chybným a správným textem, smazání s potvrzením; skener se v testech nahradí rozhraním, aby nebyla potřeba kamera
-- [ ] 👤 Ruční zkouška importu přes QR na skutečném zařízení s kamerou (QR kódy z obrazovky počítače, i více kódů za sebou)
+- [x] 👤 Ruční zkouška importu přes QR na skutečném zařízení s kamerou (QR kódy z obrazovky počítače, i více kódů za sebou)
+  - Ověřeno na tabletu OSCAL Pad 16 (Android 13): skenování QR kódu funguje v release buildu (po opravě pravidel R8, viz `bugs.md`).
 - [x] 🤖 Aktualizovat `task.md` (sady, správa sad, QR import) a `CLAUDE.md` (struktura, závislosti, oprávnění kamery)
 
 ## Krok 15: Sestavení instalovatelného APK
@@ -228,6 +229,7 @@ Co se dělá: ikona, podpis a APK k ruční instalaci. Rozhodnutí: verze `0.1.0
 - [x] 🤖 Vytvořit podepsané APK a ověřit ho bez instalace (`apksigner verify`, `aapt dump badging`: název, verze, `minSdk`, oprávnění)
   - Ověřeno: podpis platný (schéma v2, stačí pro `minSdk` 26), `cz.wordik.app` 0.1.0 (1), `minSdk` 26, název Wordík. Soubor je v `dist/Wordik-0.1.0.apk` (23 MB, mimo git).
 - [ ] 👤 Ruční instalace APK na vaše zařízení a schválení (včetně zkoušky, že minifikovaná verze funguje, zejména skener QR)
+  - Skener QR v minifikované verzi ověřen na tabletu OSCAL Pad 16 po opravě pravidel R8 (`app/proguard-rules.pro`); zbývá celkové schválení.
 - [x] 🤖 Aktualizovat `CLAUDE.md` (příkazy pro release build, struktura projektu)
 
 ## Krok 16: Publikace na Google Play (poslední) – ZABLOKOVÁNO
