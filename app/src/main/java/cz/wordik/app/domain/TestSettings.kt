@@ -1,6 +1,11 @@
 package cz.wordik.app.domain
 
-enum class TestMode { CHOICE, ASSEMBLY }
+/**
+ * Režim testu. [REGRESSIVE] je skládání po písmenkách (vždy [Evaluation.PER_LETTER]), které se
+ * opakuje jen se slovíčky s chybou, dokud nejsou všechna napsána bez chyby; počet průchodů
+ * ani minimální úspěšnost se nepoužívají.
+ */
+enum class TestMode { CHOICE, ASSEMBLY, REGRESSIVE }
 
 /** Způsob hodnocení v režimu skládání slova. */
 enum class Evaluation { WHOLE_WORD, PER_LETTER }

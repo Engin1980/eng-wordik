@@ -52,7 +52,7 @@ class ChoiceTestViewModel(
 
     private val test: ChoiceTest? = runCatching {
         ChoiceTest(
-            TestSession(words, settings.minPasses, settings.minSuccessPercent, random, clock),
+            TestSession(words, settings.minPasses, settings.minSuccessPercent, random, clock = clock),
             ChoiceQuestionGenerator(words, settings.direction, settings.wrongOptions, random),
         )
     }.getOrNull()

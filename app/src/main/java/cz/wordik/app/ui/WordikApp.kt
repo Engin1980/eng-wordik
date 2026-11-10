@@ -41,16 +41,16 @@ fun WordikApp(container: AppContainer) {
         factory = viewModelFactory { initializer { AppViewModel(container.settingsStore) } },
     )
     val stack by appViewModel.stack.collectAsStateWithLifecycle()
-    val sizeLevel by appViewModel.sizeLevel.collectAsStateWithLifecycle()
+    val sizePercent by appViewModel.sizePercent.collectAsStateWithLifecycle()
     val sets by container.library.sets.collectAsStateWithLifecycle()
 
-    WordikTheme(sizeLevel = sizeLevel, fontName = container.config.fontName) {
+    WordikTheme(sizePercent = sizePercent, fontName = container.config.fontName) {
         BackHandler(enabled = stack.size > 1) { appViewModel.back() }
 
         when (val screen = stack.last()) {
             Screen.AppSettings -> AppSettingsScreen(
-                sizeLevel = sizeLevel,
-                onSizeLevelChange = appViewModel::setSizeLevel,
+                sizePercent = sizePercent,
+                onSizePercentChange = appViewModel::setSizePercent,
                 onBack = { appViewModel.back() },
             )
             Screen.SetSelection -> {
@@ -128,7 +128,7 @@ private fun TestHost(screen: Screen.Test, sets: List<WordSet>, container: AppCon
             )
             ChoiceTestScreen(vm, onFinished = finish, onAbandon = { appViewModel.back() })
         }
-        TestMode.ASSEMBLY -> {
+        TestMode.ASSEMBLY, TestMode.REGRESSIVE -> {
             val vm: AssemblyTestViewModel = viewModel(
                 key = "test:${screen.runId}",
                 factory = viewModelFactory {

@@ -14,7 +14,6 @@ import cz.wordik.app.domain.Direction
 import cz.wordik.app.domain.Evaluation
 import cz.wordik.app.domain.SettingsCodec
 import cz.wordik.app.domain.SettingsRanges
-import cz.wordik.app.domain.SizeLevel
 import cz.wordik.app.domain.TestMode
 import cz.wordik.app.domain.TestSettings
 import java.io.File
@@ -157,21 +156,21 @@ class SettingsStoreTest {
 
     @Test
     fun `velikost je vychozi normalni`() = runBlocking {
-        assertEquals(SizeLevel.NORMAL, store().sizeLevel.first())
+        assertEquals(100, store().sizePercent.first())
     }
 
     @Test
     fun `velikost se uklada a preziva restart`() = runBlocking {
-        store(openFileDataStore()).saveSizeLevel(SizeLevel.LARGE)
-        assertEquals(SizeLevel.LARGE, reopen().sizeLevel.first())
+        store(openFileDataStore()).saveSizePercent(130)
+        assertEquals(130, reopen().sizePercent.first())
     }
 
     @Test
     fun `velikost a nastaveni testu se neovlivnuji`() = runBlocking {
         val store = store()
-        store.saveSizeLevel(SizeLevel.LARGE)
+        store.saveSizePercent(130)
         store.saveTestSettings(listOf("A"), custom)
-        assertEquals(SizeLevel.LARGE, store.sizeLevel.first())
+        assertEquals(130, store.sizePercent.first())
         assertEquals(custom, store.loadTestSettings(listOf("A")))
     }
 
@@ -204,14 +203,32 @@ class SettingsStoreTest {
     fun `neznama velikost vrati normalni`() = runBlocking {
         val dataStore = openDataStore()
         dataStore.edit { it[stringPreferencesKey("size_level")] = "OBROVSKE" }
-        assertEquals(SizeLevel.NORMAL, store(dataStore).sizeLevel.first())
+        assertEquals(100, store(dataStore).sizePercent.first())
+    }
+
+    @Test
+    fun `stara volba Velke se prevede na 130 procent`() = runBlocking {
+        val dataStore = openDataStore()
+        dataStore.edit { it[stringPreferencesKey("size_level")] = "LARGE" }
+        assertEquals(130, store(dataStore).sizePercent.first())
+    }
+
+    @Test
+    fun `velikost mimo rozsah se omezi a zaokrouhli`() = runBlocking {
+        val store = store()
+        store.saveSizePercent(500)
+        assertEquals(200, store.sizePercent.first())
+        store.saveSizePercent(10)
+        assertEquals(80, store.sizePercent.first())
+        store.saveSizePercent(133)
+        assertEquals(130, store.sizePercent.first())
     }
 
     @Test
     fun `nepouzitelny soubor vrati vychozi hodnoty`() = runBlocking {
         val store = store(FakeDataStore(failReads = true))
         assertEquals(defaults, store.loadTestSettings(listOf("A")))
-        assertEquals(SizeLevel.NORMAL, store.sizeLevel.first())
+        assertEquals(100, store.sizePercent.first())
     }
 
     @Test
@@ -220,6 +237,6 @@ class SettingsStoreTest {
         // Čtení spustí corruptionHandler; na Windows JVM může jeho zápis selhat, výsledek je ale stejný.
         val store = store(openFileDataStore())
         assertEquals(defaults, store.loadTestSettings(listOf("A")))
-        assertEquals(SizeLevel.NORMAL, store.sizeLevel.first())
+        assertEquals(100, store.sizePercent.first())
     }
 }

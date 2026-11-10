@@ -9,6 +9,7 @@ import cz.wordik.app.domain.Evaluation
 import cz.wordik.app.domain.PressResult
 import cz.wordik.app.domain.TestResult
 import cz.wordik.app.domain.TestSession
+import cz.wordik.app.domain.TestMode
 import cz.wordik.app.domain.TestSettings
 import cz.wordik.app.domain.Word
 import cz.wordik.app.sound.NoSoundPlayer
@@ -47,6 +48,8 @@ data class AssemblyUiState(
     /** Správné znění, zobrazí se po vyhodnocení slova s chybou. */
     val correctAnswer: String? = null,
     val pass: Int = 1,
+    /** Režim "Regresivní": průchody se nazývají kola. */
+    val regressive: Boolean = false,
     /** Hotová slovíčka rozpracovaného průchodu a jejich celkový počet. */
     val passDone: Int = 0,
     val passTotal: Int = 1,
@@ -67,9 +70,14 @@ class AssemblyTestViewModel(
     clock: () -> Long = System::currentTimeMillis,
 ) : ViewModel() {
 
+    private val regressive = settings.mode == TestMode.REGRESSIVE
+
     private val test = AssemblyTest(
-        session = TestSession(words, settings.minPasses, settings.minSuccessPercent, random, clock),
-        evaluation = settings.evaluation,
+        session = TestSession(
+            words, settings.minPasses, settings.minSuccessPercent, random,
+            regressive = regressive, clock = clock,
+        ),
+        evaluation = if (regressive) Evaluation.PER_LETTER else settings.evaluation,
         extraLetters = settings.extraLetters,
         letterPool = AssemblyRound.letterPool(words),
         random = random,
@@ -176,6 +184,7 @@ class AssemblyTestViewModel(
             letterError = letterError,
             correctAnswer = round?.takeIf { it.needsManualNext }?.target,
             pass = test.session.completedPasses + 1,
+            regressive = regressive,
             passDone = test.session.wordsDoneInPass,
             passTotal = test.session.wordCount,
             successPercent = (test.session.successRate * 100).roundToInt(),

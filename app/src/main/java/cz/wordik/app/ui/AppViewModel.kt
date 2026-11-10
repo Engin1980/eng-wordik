@@ -3,7 +3,7 @@ package cz.wordik.app.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.wordik.app.data.SettingsStore
-import cz.wordik.app.domain.SizeLevel
+import cz.wordik.app.domain.SizeScale
 import cz.wordik.app.domain.TestResult
 import cz.wordik.app.domain.TestSettings
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,8 +44,9 @@ class AppViewModel(private val store: SettingsStore) : ViewModel() {
 
     val current: Screen get() = _stack.value.last()
 
-    val sizeLevel: StateFlow<SizeLevel> =
-        store.sizeLevel.stateIn(viewModelScope, SharingStarted.Eagerly, SizeLevel.NORMAL)
+    /** Škála velikosti ovládacích prvků a písma v procentech. */
+    val sizePercent: StateFlow<Int> =
+        store.sizePercent.stateIn(viewModelScope, SharingStarted.Eagerly, SizeScale.DEFAULT_PERCENT)
 
     private var runCounter = 0
 
@@ -74,7 +75,7 @@ class AppViewModel(private val store: SettingsStore) : ViewModel() {
     fun repeatTest(setNames: List<String>, settings: TestSettings) =
         _stack.update { it.dropLast(1) + Screen.Test(setNames, settings, ++runCounter) }
 
-    fun setSizeLevel(level: SizeLevel) {
-        viewModelScope.launch { store.saveSizeLevel(level) }
+    fun setSizePercent(percent: Int) {
+        viewModelScope.launch { store.saveSizePercent(percent) }
     }
 }

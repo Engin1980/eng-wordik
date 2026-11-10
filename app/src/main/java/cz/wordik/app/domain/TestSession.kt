@@ -34,6 +34,9 @@ data class TestResult(
  * se uzavře [completeWord]; tam se kontroluje konec. Jednotkou statistiky je odpověď,
  * resp. písmeno při hodnocení po písmenkách.
  *
+ * @param regressive režim "Regresivní": každý další průchod obsahuje jen slovíčka, u kterých se
+ *   v předchozím průchodu vyskytla chyba; test končí průchodem bez chyby ([minPasses] a
+ *   [minSuccessPercent] se ignorují)
  * @param random zdroj náhodnosti vkládaný zvenku (kvůli testům)
  * @param clock hodiny v milisekundách vkládané zvenku (kvůli testům)
  */
@@ -42,6 +45,7 @@ class TestSession(
     private val minPasses: Int,
     private val minSuccessPercent: Int,
     private val random: Random = Random.Default,
+    private val regressive: Boolean = false,
     private val clock: () -> Long = System::currentTimeMillis,
 ) {
     init {
@@ -56,6 +60,8 @@ class TestSession(
     private val startedAt = clock()
     private var endedAt: Long? = null
     private var lastAskedIndex = -1
+    private val failedInPass = mutableSetOf<Int>()
+    private var passSize = words.size
 
     /** Počet dokončených celých průchodů. */
     var completedPasses = 0
@@ -74,11 +80,11 @@ class TestSession(
     val successRate: Double
         get() = (totalCorrect + totalWrong).let { if (it == 0) 0.0 else totalCorrect.toDouble() / it }
 
-    /** Počet slovíček v jednom průchodu. */
-    val wordCount: Int get() = words.size
+    /** Počet slovíček v rozpracovaném průchodu (v regresivním režimu se průchody zkracují). */
+    val wordCount: Int get() = passSize
 
     /** Slovíček už hotových v rozpracovaném průchodu. */
-    val wordsDoneInPass: Int get() = words.size - queue.size
+    val wordsDoneInPass: Int get() = passSize - queue.size
 
     /** Slovíček zbývajících v rozpracovaném průchodu včetně aktuálního. */
     val wordsLeftInPass: Int get() = queue.size
@@ -97,6 +103,7 @@ class TestSession(
         val index = queue.first()
         correctByWord[index] += correct
         wrongByWord[index] += wrong
+        if (wrong > 0) failedInPass += index
     }
 
     /** Uzavře aktuální slovíčko, posune se na další a zkontroluje podmínky konce. */
@@ -105,7 +112,11 @@ class TestSession(
         lastAskedIndex = queue.removeFirst()
         if (queue.isEmpty()) completedPasses++
 
-        if (completedPasses >= minPasses && isSuccessTargetReached()) {
+        if (regressive) {
+            if (queue.isEmpty()) {
+                if (failedInPass.isEmpty()) finish(aborted = false) else refill(failedInPass.toList())
+            }
+        } else if (completedPasses >= minPasses && isSuccessTargetReached()) {
             finish(aborted = false)
         } else if (queue.isEmpty()) {
             refill()
@@ -143,8 +154,10 @@ class TestSession(
     }
 
     /** Nový náhodný průchod; první slovíčko se nesmí shodovat s právě zkoušeným. */
-    private fun refill() {
-        val order = words.indices.shuffled(random).toMutableList()
+    private fun refill(indices: List<Int> = words.indices.toList()) {
+        failedInPass.clear()
+        passSize = indices.size
+        val order = indices.shuffled(random).toMutableList()
         if (order.size > 1 && order.first() == lastAskedIndex) {
             val other = random.nextInt(1, order.size)
             order[0] = order[other].also { order[other] = order[0] }

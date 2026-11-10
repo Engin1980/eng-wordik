@@ -1,7 +1,27 @@
 package cz.wordik.app.domain
 
-/** Velikost tlačítek a písma v celé aplikaci. */
-enum class SizeLevel { NORMAL, LARGE }
+/** Škála velikosti tlačítek a písma v celé aplikaci v procentech (viz [MIN_PERCENT]–[MAX_PERCENT]). */
+object SizeScale {
+    const val MIN_PERCENT = 80
+    const val MAX_PERCENT = 200
+    const val STEP_PERCENT = 10
+    const val DEFAULT_PERCENT = 100
+
+    val range: IntRange = MIN_PERCENT..MAX_PERCENT
+
+    /** Omezí hodnotu na povolený rozsah a zaokrouhlí na [STEP_PERCENT]. */
+    fun normalize(percent: Int): Int {
+        val rounded = (percent + STEP_PERCENT / 2) / STEP_PERCENT * STEP_PERCENT
+        return rounded.coerceIn(MIN_PERCENT, MAX_PERCENT)
+    }
+
+    /** Převod staré volby „Normální / Velké“ uložené jako název. */
+    fun fromLegacy(name: String?): Int? = when (name) {
+        "NORMAL" -> 100
+        "LARGE" -> 130
+        else -> null
+    }
+}
 
 /** Převody mezi nastavením a textem, ve kterém se ukládá. */
 object SettingsCodec {
@@ -46,7 +66,7 @@ object SettingsCodec {
         // Skrytá pole (podle režimu) se nekontrolují, ale musí být čitelná jako čísla.
         if (minPasses !in ranges.minPasses || minSuccessPercent !in ranges.minSuccessPercent) return null
         if (mode == TestMode.CHOICE && wrongOptions !in ranges.wrongOptions) return null
-        if (mode == TestMode.ASSEMBLY && extraLetters !in ranges.extraLetters) return null
+        if (mode != TestMode.CHOICE && extraLetters !in ranges.extraLetters) return null
 
         return TestSettings(mode, wrongOptions, minPasses, minSuccessPercent, extraLetters, evaluation, direction)
     }

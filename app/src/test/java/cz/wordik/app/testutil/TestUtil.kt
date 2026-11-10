@@ -5,7 +5,7 @@ import cz.wordik.app.domain.Direction
 import cz.wordik.app.domain.Evaluation
 import cz.wordik.app.domain.SettingsCodec
 import cz.wordik.app.domain.SettingsRanges
-import cz.wordik.app.domain.SizeLevel
+import cz.wordik.app.domain.SizeScale
 import cz.wordik.app.domain.TestMode
 import cz.wordik.app.domain.TestSettings
 import cz.wordik.app.domain.AppConfig
@@ -32,7 +32,7 @@ class MainDispatcherRule(val dispatcher: TestDispatcher = StandardTestDispatcher
 /** Úložiště nastavení v paměti. */
 class FakeSettingsStore(private val defaults: TestSettings = TestData.defaults) : SettingsStore {
     val saved = mutableMapOf<String, TestSettings>()
-    private val size = MutableStateFlow(SizeLevel.NORMAL)
+    private val size = MutableStateFlow(SizeScale.DEFAULT_PERCENT)
 
     override suspend fun loadTestSettings(setNames: Collection<String>): TestSettings =
         saved[SettingsCodec.combinationKey(setNames)] ?: defaults
@@ -41,10 +41,10 @@ class FakeSettingsStore(private val defaults: TestSettings = TestData.defaults) 
         saved[SettingsCodec.combinationKey(setNames)] = settings
     }
 
-    override val sizeLevel: Flow<SizeLevel> = size
+    override val sizePercent: Flow<Int> = size
 
-    override suspend fun saveSizeLevel(level: SizeLevel) {
-        size.value = level
+    override suspend fun saveSizePercent(percent: Int) {
+        size.value = percent
     }
 }
 

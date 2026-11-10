@@ -41,7 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cz.wordik.app.R
-import cz.wordik.app.domain.SizeLevel
+import cz.wordik.app.domain.SizeScale
 import cz.wordik.app.ui.theme.LocalSizes
 import cz.wordik.app.ui.theme.WordikTheme
 
@@ -225,7 +225,7 @@ private fun BigButtonPreview() {
 @Preview(showBackground = true, name = "Velké")
 @Composable
 private fun BigButtonLargePreview() {
-    WordikTheme(SizeLevel.LARGE) {
+    WordikTheme(sizePercent = 130) {
         Surface {
             Column(Modifier.padding(16.dp)) { BigButton("Pokračovat", {}, Modifier.fillMaxWidth()) }
         }

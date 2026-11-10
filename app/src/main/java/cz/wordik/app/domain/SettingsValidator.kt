@@ -30,11 +30,13 @@ object SettingsValidator {
             if (value !in range) errors += SettingsError.OutOfRange(field, value, range)
         }
 
-        check(SettingsError.Field.MIN_PASSES, settings.minPasses, ranges.minPasses)
-        check(SettingsError.Field.MIN_SUCCESS_PERCENT, settings.minSuccessPercent, ranges.minSuccessPercent)
+        if (settings.mode != TestMode.REGRESSIVE) {
+            check(SettingsError.Field.MIN_PASSES, settings.minPasses, ranges.minPasses)
+            check(SettingsError.Field.MIN_SUCCESS_PERCENT, settings.minSuccessPercent, ranges.minSuccessPercent)
+        }
         when (settings.mode) {
             TestMode.CHOICE -> check(SettingsError.Field.WRONG_OPTIONS, settings.wrongOptions, ranges.wrongOptions)
-            TestMode.ASSEMBLY -> check(SettingsError.Field.EXTRA_LETTERS, settings.extraLetters, ranges.extraLetters)
+            TestMode.ASSEMBLY, TestMode.REGRESSIVE -> check(SettingsError.Field.EXTRA_LETTERS, settings.extraLetters, ranges.extraLetters)
         }
 
         val wordCount = selectedSets.sumOf { it.words.size }

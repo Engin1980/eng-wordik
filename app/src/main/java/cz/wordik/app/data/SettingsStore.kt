@@ -5,12 +5,13 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import cz.wordik.app.domain.AppConfig
 import cz.wordik.app.domain.SettingsCodec
-import cz.wordik.app.domain.SizeLevel
+import cz.wordik.app.domain.SizeScale
 import cz.wordik.app.domain.TestSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -24,10 +25,10 @@ interface SettingsStore {
 
     suspend fun saveTestSettings(setNames: Collection<String>, settings: TestSettings)
 
-    /** Volba „Normální / Velké“ pro celou aplikaci; výchozí je [SizeLevel.NORMAL]. */
-    val sizeLevel: Flow<SizeLevel>
+    /** Velikost ovládacích prvků a písma v % pro celou aplikaci; výchozí je [SizeScale.DEFAULT_PERCENT]. */
+    val sizePercent: Flow<Int>
 
-    suspend fun saveSizeLevel(level: SizeLevel)
+    suspend fun saveSizePercent(percent: Int)
 }
 
 class DataStoreSettingsStore(
@@ -35,7 +36,10 @@ class DataStoreSettingsStore(
     private val config: AppConfig,
 ) : SettingsStore {
 
-    private val sizeLevelKey = stringPreferencesKey("size_level")
+    private val sizePercentKey = intPreferencesKey("size_percent")
+
+    /** Klíč ze starší verze (volba Normální / Velké), čte se jen jako záloha. */
+    private val legacySizeLevelKey = stringPreferencesKey("size_level")
 
     private fun testSettingsKey(setNames: Collection<String>) =
         stringPreferencesKey("test_settings:" + SettingsCodec.combinationKey(setNames))
@@ -53,13 +57,14 @@ class DataStoreSettingsStore(
         dataStore.edit { it[testSettingsKey(setNames)] = SettingsCodec.encode(settings) }
     }
 
-    override val sizeLevel: Flow<SizeLevel> = preferences.map { prefs ->
-        val stored = runCatching { prefs[sizeLevelKey] }.getOrNull()
-        SizeLevel.entries.firstOrNull { it.name == stored } ?: SizeLevel.NORMAL
+    override val sizePercent: Flow<Int> = preferences.map { prefs ->
+        val stored = runCatching { prefs[sizePercentKey] }.getOrNull()
+        val legacy = runCatching { prefs[legacySizeLevelKey] }.getOrNull()
+        stored?.let(SizeScale::normalize) ?: SizeScale.fromLegacy(legacy) ?: SizeScale.DEFAULT_PERCENT
     }
 
-    override suspend fun saveSizeLevel(level: SizeLevel) {
-        dataStore.edit { it[sizeLevelKey] = level.name }
+    override suspend fun saveSizePercent(percent: Int) {
+        dataStore.edit { it[sizePercentKey] = SizeScale.normalize(percent) }
     }
 
     /** Hodnota jiného typu pod stejným klíčem (ClassCastException) se bere jako chybějící. */

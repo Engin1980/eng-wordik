@@ -1,7 +1,6 @@
 package cz.wordik.app.ui
 
 import app.cash.turbine.test
-import cz.wordik.app.domain.SizeLevel
 import cz.wordik.app.domain.TestResult
 import cz.wordik.app.testutil.FakeSettingsStore
 import cz.wordik.app.testutil.MainDispatcherRule
@@ -92,11 +91,11 @@ class AppViewModelTest {
     fun `velikost se uklada a propisuje`() = runTest {
         val store = FakeSettingsStore()
         val vm = AppViewModel(store)
-        vm.sizeLevel.test {
-            assertEquals(SizeLevel.NORMAL, awaitItem())
-            vm.setSizeLevel(SizeLevel.LARGE)
+        vm.sizePercent.test {
+            assertEquals(100, awaitItem())
+            vm.setSizePercent(150)
             mainRule.dispatcher.scheduler.advanceUntilIdle()
-            assertEquals(SizeLevel.LARGE, awaitItem())
+            assertEquals(150, awaitItem())
         }
     }
 }

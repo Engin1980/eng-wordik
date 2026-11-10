@@ -344,6 +344,7 @@ fun TestSetupContent(
             options = listOf(
                 TestMode.CHOICE to stringResource(R.string.mode_choice),
                 TestMode.ASSEMBLY to stringResource(R.string.mode_assembly),
+                TestMode.REGRESSIVE to stringResource(R.string.mode_regressive),
             ),
             selected = settings.mode,
             onSelect = callbacks.onMode,
@@ -369,6 +370,19 @@ fun TestSetupContent(
                     onSelect = callbacks.onDirection,
                 )
             }
+            TestMode.REGRESSIVE -> {
+                Text(
+                    stringResource(R.string.setup_regressive_hint),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                NumberStepper(
+                    label = stringResource(R.string.setup_extra_letters),
+                    value = settings.extraLetters,
+                    range = ranges.extraLetters,
+                    onChange = callbacks.onExtraLetters,
+                )
+            }
             TestMode.ASSEMBLY -> {
                 NumberStepper(
                     label = stringResource(R.string.setup_extra_letters),
@@ -388,20 +402,22 @@ fun TestSetupContent(
             }
         }
 
-        NumberStepper(
-            label = stringResource(R.string.setup_min_passes),
-            value = settings.minPasses,
-            range = ranges.minPasses,
-            onChange = callbacks.onMinPasses,
-        )
-        NumberStepper(
-            label = stringResource(R.string.setup_min_success),
-            value = settings.minSuccessPercent,
-            range = ranges.minSuccessPercent,
-            step = 5,
-            suffix = " %",
-            onChange = callbacks.onMinSuccess,
-        )
+        if (settings.mode != TestMode.REGRESSIVE) {
+            NumberStepper(
+                label = stringResource(R.string.setup_min_passes),
+                value = settings.minPasses,
+                range = ranges.minPasses,
+                onChange = callbacks.onMinPasses,
+            )
+            NumberStepper(
+                label = stringResource(R.string.setup_min_success),
+                value = settings.minSuccessPercent,
+                range = ranges.minSuccessPercent,
+                step = 5,
+                suffix = " %",
+                onChange = callbacks.onMinSuccess,
+            )
+        }
     }
 }
 

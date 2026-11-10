@@ -14,9 +14,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.wordik.app.R
-import cz.wordik.app.domain.SizeLevel
+import cz.wordik.app.domain.SizeScale
 
-/** Rozměry závislé na volbě "Normální / Velké". */
+/** Rozměry závislé na zvolené škále velikosti (%). */
 data class Sizes(
     /** Minimální výška tlačítek. */
     val buttonHeight: Dp,
@@ -26,12 +26,12 @@ data class Sizes(
     val tileSize: Dp,
 )
 
-fun sizesFor(level: SizeLevel) = when (level) {
-    SizeLevel.NORMAL -> Sizes(buttonHeight = 56.dp, textScale = 1f, tileSize = 52.dp)
-    SizeLevel.LARGE -> Sizes(buttonHeight = 72.dp, textScale = 1.3f, tileSize = 68.dp)
+fun sizesFor(percent: Int): Sizes {
+    val scale = percent / 100f
+    return Sizes(buttonHeight = 56.dp * scale, textScale = scale, tileSize = 52.dp * scale)
 }
 
-val LocalSizes = staticCompositionLocalOf { sizesFor(SizeLevel.NORMAL) }
+val LocalSizes = staticCompositionLocalOf { sizesFor(SizeScale.DEFAULT_PERCENT) }
 
 /** Barvy zpětné vazby, které Material schéma nemá. */
 data class FeedbackColors(
@@ -114,11 +114,11 @@ fun scaledTypography(family: FontFamily, scale: Float): Typography {
 
 @Composable
 fun WordikTheme(
-    sizeLevel: SizeLevel = SizeLevel.NORMAL,
+    sizePercent: Int = SizeScale.DEFAULT_PERCENT,
     fontName: String = "Atkinson Hyperlegible",
     content: @Composable () -> Unit,
 ) {
-    val sizes = sizesFor(sizeLevel)
+    val sizes = sizesFor(sizePercent)
     // Tmavý režim zatím není požadován, vždy světlé schéma.
     CompositionLocalProvider(LocalSizes provides sizes) {
         MaterialTheme(

@@ -41,8 +41,7 @@
     <string name="settings_title">Nastavení</string>
     <string name="settings_size_title">Velikost tlačítek a písma</string>
     <string name="settings_size_hint">Platí pro celou aplikaci.</string>
-    <string name="settings_size_normal">Normální</string>
-    <string name="settings_size_large">Velké</string>
+    <string name="settings_size_value">%1$d %%</string>
 
     <!-- Výběr sad -->
     <string name="select_title">Wordík</string>
@@ -63,6 +62,8 @@
     <string name="setup_mode">Režim testu</string>
     <string name="mode_choice">Výběr z variant</string>
     <string name="mode_assembly">Skládání slova z písmen</string>
+    <string name="mode_regressive">Regresivní</string>
+    <string name="setup_regressive_hint">Slovíčka se skládají po písmenkách. Slovíčka s chybou se opakují v dalších kolech, dokud nejsou všechna napsána bez chyby.</string>
     <string name="setup_wrong_options">Počet nesprávných variant</string>
     <string name="setup_direction">Směr</string>
     <string name="direction_cz_foreign">Česky → cizí jazyk</string>
@@ -80,6 +81,7 @@
 
     <!-- Test -->
     <string name="test_title">Test</string>
+    <string name="test_progress_regressive">Kolo %1$d · úspěšnost %2$d %%</string>
     <string name="test_progress">Průchod %1$d · úspěšnost %2$d %%</string>
     <string name="test_pass_progress">Hotovo %1$d z %2$d slovíček v tomto průchodu</string>
     <string name="test_quit">Ukončit</string>

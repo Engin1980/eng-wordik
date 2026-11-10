@@ -98,7 +98,10 @@ fun AssemblyTestContent(
         )
     }
     ScreenScaffold(
-        title = stringResource(R.string.test_progress, state.pass, state.successPercent),
+        title = stringResource(
+            if (state.regressive) R.string.test_progress_regressive else R.string.test_progress,
+            state.pass, state.successPercent,
+        ),
         actions = {
             TextButton(onClick = onQuit) {
                 Text(stringResource(R.string.test_quit), style = MaterialTheme.typography.titleMedium)
